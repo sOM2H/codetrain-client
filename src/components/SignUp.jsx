@@ -1,42 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
+import { useForm } from "react-hook-form";
 import axios from 'axios';
 
 function SignUp() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:3000/auth', {
-        email,
-        password,
-        password_confirmation: passwordConfirmation
-      });
-      console.log(response.data);
+      setLoading(true);
+      const response = await axios.post('http://localhost:3000/auth', data);
+
+      localStorage.setItem("user", JSON.stringify(response.data));
+      localStorage.setItem("access-token", JSON.stringify(response.headers['access-token']));
+  
+      setErrorMessage(null);
+      setLoading(false);  
     } catch (error) {
-      console.error(error);
+      setErrorMessage('This email address has been already taken by another user');
+      setLoading(false);
     }
   };
 
   return (
     <div className="container">
       <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email:</label>
-          <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
+      {errorMessage && (
+        <div className="alert alert-danger" role="alert">
+          {errorMessage}
         </div>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
-          <label>Password:</label>
-          <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <label htmlFor="email">Email:</label>
+          <input
+            className="form-control"
+            id="email"
+            type="email"
+            {...register('email', { required: 'Email is required' })}
+          />
+          {errors.email && <p>{errors.email.message}</p>}
         </div>
+
         <div className="form-group">
-          <label>Confirm Password:</label>
-          <input type="password" className="form-control" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} required />
+          <label htmlFor="password">Password:</label>
+          <input
+            className="form-control"
+            id="password"
+            type="password"
+            {...register('password', { required: 'Password is required' })}
+          />
+          {errors.password && <p>{errors.password.message}</p>}
         </div>
-        <button type="submit" className="btn btn-primary">Sign Up</button>
+
+        <div className="form-group">
+          <label htmlFor="password">Password Confirmation:</label>
+          <input
+            className="form-control"
+            id="password_confirmation"
+            type="password"
+            {...register('password_confirmation', { required: 'Password confirmation is required' })}
+          />
+          {errors.password_confirmation && <p>{errors.password_confirmation.message}</p>}
+        </div>
+
+        { loading ?
+            <button className="btn btn-primary" type="button" disabled>
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+            </button>
+          :
+            <button type="submit" className="btn btn-primary">Sign Up</button>
+        }
       </form>
     </div>
   );
