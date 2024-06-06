@@ -1,23 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import GoogleLoginButton from './GoogleLoginButton';
 
-const Login = (props) => {
+import { AuthContext } from '../contexts/AuthContext';
 
+const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
       const response = await axios.post('http://localhost:3000/auth/sign_in', data);
 
-      localStorage.setItem("user", JSON.stringify(response.data));
-      localStorage.setItem("access-token", JSON.stringify(response.headers['access-token']));
+      login(response.data.data, response.headers['access-token']);
 
       setErrorMessage(null);
       setLoading(false);
+      navigate("/profile");
     } catch (error) {
       setErrorMessage('Invalid email or password');
       setLoading(false);
@@ -41,6 +46,7 @@ const Login = (props) => {
             type="email"
             {...register('email', { required: 'Email is required' })}
           />
+          {errors.email && <p>{errors.email.message}</p>}
         </div>
 
         <div className="form-group">
@@ -51,16 +57,17 @@ const Login = (props) => {
             type="password"
             {...register('password', { required: 'Password is required' })}
           />
+          {errors.password && <p>{errors.password.message}</p>}
         </div>
-        { loading ?
-            <button className="btn btn-primary" type="button" disabled>
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Loading...
-            </button>
-          :
-            <button type="submit" className="btn btn-primary">Login</button>
+        {loading ?
+          <button className="btn btn-primary" type="button" disabled>
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+          </button>
+        :
+          <button type="submit" className="btn btn-primary">Login</button>
         }
-
+        <GoogleLoginButton />
       </form>
     </div>
   );

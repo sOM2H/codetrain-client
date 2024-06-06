@@ -6,6 +6,10 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
+import Profile from './components/Profile';
+
+
+import PrivateRoute from './components/helpers/PrivateRoute';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +35,12 @@ const router = createBrowserRouter([
       {
         path: 'signup',
         element: <SignUp />,
+      },
+      {
+        path: 'profile',
+        element: (
+          <PrivateRoute element={<Profile />} />
+        ),
       },
     ],
   },

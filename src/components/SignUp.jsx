@@ -1,23 +1,28 @@
-import React, { useState} from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import GoogleLoginButton from './GoogleLoginButton';
+
+import { AuthContext } from '../contexts/AuthContext';
 
 function SignUp() {
-
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
       const response = await axios.post('http://localhost:3000/auth', data);
 
-      localStorage.setItem("user", JSON.stringify(response.data));
-      localStorage.setItem("access-token", JSON.stringify(response.headers['access-token']));
-  
+      login(response.data.data, response.headers['access-token']);
+
       setErrorMessage(null);
-      setLoading(false);  
+      setLoading(false);
+      navigate("/profile");
     } catch (error) {
       setErrorMessage('This email address has been already taken by another user');
       setLoading(false);
@@ -56,7 +61,7 @@ function SignUp() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Password Confirmation:</label>
+          <label htmlFor="password_confirmation">Password Confirmation:</label>
           <input
             className="form-control"
             id="password_confirmation"
@@ -66,14 +71,15 @@ function SignUp() {
           {errors.password_confirmation && <p>{errors.password_confirmation.message}</p>}
         </div>
 
-        { loading ?
-            <button className="btn btn-primary" type="button" disabled>
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Loading...
-            </button>
-          :
-            <button type="submit" className="btn btn-primary">Sign Up</button>
-        }
+        {loading ? (
+          <button className="btn btn-primary" type="button" disabled>
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading...
+          </button>
+        ) : (
+          <button type="submit" className="btn btn-primary">Sign Up</button>
+        )}
+        <GoogleLoginButton />
       </form>
     </div>
   );

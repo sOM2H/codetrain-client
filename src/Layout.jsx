@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import { AuthContext } from './contexts/AuthContext';
 
 function Layout() {
+  const { currentUser, logout } = useContext(AuthContext);
+
   return (
     <div className="container">
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -17,12 +20,25 @@ function Layout() {
             <li className="nav-item">
               <Link className="nav-link" to="/contact">Contact</Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">Login</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/signup">Sign Up</Link>
-            </li>
+            {currentUser ? (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/profile"> {currentUser.email} </Link>
+                </li>
+                <li className="nav-item">
+                  <button className="nav-link btn btn-link" onClick={logout}>Logout</button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">Login</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/signup">Sign Up</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </nav>
