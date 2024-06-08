@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
-import { AuthContext } from '../contexts/AuthContext';
+import React from "react";
+import { useAuth } from '../hooks/AuthProvider';
 
 const Profile = () => {
-  const { currentUser } = useContext(AuthContext);
+  const currentUser = useAuth();
 
   return (
     <div className="container">
       <header className="jumbotron">
         <h3>
           <strong> Profile </strong>
-          <h3>Email: {currentUser.email}</h3>
+          <h2>Token: {currentUser?.token}</h2>
+          <h2>Email: {currentUser?.data?.email}</h2>
         </h3>
       </header>
     </div>
