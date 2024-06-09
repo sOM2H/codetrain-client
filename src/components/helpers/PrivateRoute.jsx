@@ -7,7 +7,7 @@ const PrivateRoute = () => {
   const user = useAuth();
 
   if (user.token && user.email && user.id) return <Outlet />;
-  return <Navigate to="/" />;
+  return <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

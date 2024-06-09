@@ -6,10 +6,10 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
 
-  const [id, setId] = useState(localStorage.getItem("userId") || "");
-  const [email, setEmail] = useState(localStorage.getItem("userEmail") || "");
-  const [name, setName] = useState(localStorage.getItem("userName") || "");
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [id, setId] = useState(localStorage.getItem("userId") || null);
+  const [email, setEmail] = useState(localStorage.getItem("userEmail") || null);
+  const [name, setName] = useState(localStorage.getItem("userName") || null);
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
   const navigate = useNavigate();
   const loginAction = async (data) => {
 
@@ -54,10 +54,10 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
-    setId('');
-    setEmail('');
-    setName('');
-    setToken('');
+    setId(null);
+    setEmail(null);
+    setName(null);
+    setToken(null);
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userId");
     localStorage.removeItem("userName");
