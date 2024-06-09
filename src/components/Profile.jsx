@@ -9,8 +9,8 @@ const Profile = () => {
       <header className="jumbotron">
         <h3>
           <strong> Profile </strong>
-          <h2>Token: {currentUser?.token}</h2>
-          <h2>Email: {currentUser?.data?.email}</h2>
+          Token: {currentUser?.token}
+          Email: {currentUser?.email}
         </h3>
       </header>
     </div>

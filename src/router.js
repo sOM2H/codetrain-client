@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './components/Home';
 import About from './components/About';
-import Contact from './components/Contact';
+import Contacts from './components/Contacts';
+import Problems from './components/Problems';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Profile from './components/Profile';
@@ -16,11 +17,12 @@ const AppRouter = () => (
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
           <Route element={<PrivateRoute />}>
+            <Route index element={<Home />} />
             <Route path="profile" element={ <Profile />} />
+            <Route path="about" element={<About />} />
+            <Route path="contacts" element={<Contacts />} />
+            <Route path="problems" element={<Problems />} />
           </Route>
         </Route>
         <Route path="login" element={<Login />} />

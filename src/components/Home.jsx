@@ -2,9 +2,11 @@ import React from 'react';
 
 function Home() {
   return (
-    <div className="jumbotron">
-      <h1 className="display-4">Home</h1>
-      <p className="lead">This is the home page.</p>
+    <div className="card">
+      <div className="card-body">
+        <h2 className="card-title">Dashboard</h2>
+        <p className="card-text">This is the dashboard page.</p>
+      </div>
     </div>
   );
 }

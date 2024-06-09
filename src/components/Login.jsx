@@ -8,8 +8,8 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const auth = useAuth();
 
-  if (auth?.token && auth?.data){
-    return <Navigate to="/profile" replace />;
+  if (auth.token && auth.email){
+    return <Navigate to="/" replace />;
   }
 
   const onSubmit = async (data) => {

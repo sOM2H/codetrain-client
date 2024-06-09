@@ -5,19 +5,28 @@ import axios from 'axios';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [data, setData] = useState(localStorage.getItem("userData") || "");
-  const [token, setToken] = useState(localStorage.getItem("site") || "");
+
+  const [id, setId] = useState(localStorage.getItem("userId") || "");
+  const [email, setEmail] = useState(localStorage.getItem("userEmail") || "");
+  const [name, setName] = useState(localStorage.getItem("userName") || "");
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
   const loginAction = async (data) => {
+
+    console.log(data);
 
     try {
       const response = await axios.post('http://localhost:3000/auth/sign_in', data);
 
-      setData(response.data.data);
+      setId(response.data.data.id);
+      setEmail(response.data.data.email);
+      setName(response.data.data.name);
       setToken(response.headers['access-token']);
-      localStorage.setItem("userData", response.data.data);
-      localStorage.setItem("site", response.headers['access-token']);
-      navigate("/profile");
+      localStorage.setItem("userId", response.data.data.id);
+      localStorage.setItem("userEmail", response.data.data.email);
+      localStorage.setItem("userName", response.data.data.name);
+      localStorage.setItem("token", response.headers['access-token']);
+      navigate("/");
       return;
     } catch (error) {
       throw new Error(error);
@@ -29,11 +38,15 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('http://localhost:3000/auth', data);
 
-      setData(response.data.data);
+      setId(response.data.data.id);
+      setEmail(response.data.data.email);
+      setName(response.data.data.name);
       setToken(response.headers['access-token']);
-      localStorage.setItem("userData", response.data.data);
-      localStorage.setItem("site", response.headers['access-token']);
-      navigate("/profile");
+      localStorage.setItem("userId", response.data.data.id);
+      localStorage.setItem("userEmail", response.data.data.email);
+      localStorage.setItem("userName", response.data.data.name);
+      localStorage.setItem("token", response.headers['access-token']);
+      navigate("/");
       return;
     } catch (error) {
       throw new Error(error);
@@ -41,15 +54,19 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
-    setData(null);
-    setToken("");
-    localStorage.removeItem("userData");
-    localStorage.removeItem("site");
+    setId('');
+    setEmail('');
+    setName('');
+    setToken('');
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("token");
     navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ token, data, loginAction, signupAction, logOut }}>
+    <AuthContext.Provider value={{ token, id, email, name, loginAction, signupAction, logOut }}>
       {children}
     </AuthContext.Provider>
   );

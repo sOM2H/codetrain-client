@@ -8,8 +8,8 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const auth = useAuth();
 
-  if (auth?.token && auth?.data){
-    return <Navigate to="/profile" replace />;
+  if (auth.token && auth.email){
+    return <Navigate to="/" replace />;
   }
 
   const onSubmit = async (data) => {
@@ -37,6 +37,16 @@ const SignUp = () => {
                       {errorMessage}
                     </div>
                   )}
+                  <div className="form-group">
+                    <label>Name *</label>
+                    <input
+                      className="form-control p_input"
+                      id="name"
+                      type="text"
+                      {...register('name', { required: 'Name is required' })}
+                    />
+                    {errors.name && <p>{errors.name.message}</p>}
+                  </div>
                   <div className="form-group">
                     <label>Email *</label>
                     <input
