@@ -9,7 +9,7 @@ const SignUp = () => {
   const auth = useAuth();
 
   if (auth.token && auth.email){
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   const onSubmit = async (data) => {

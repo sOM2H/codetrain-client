@@ -26,7 +26,9 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("userEmail", response.data.data.email);
       localStorage.setItem("userName", response.data.data.name);
       localStorage.setItem("token", response.headers['access-token']);
-      navigate("/");
+      navigate('/dashboard', { replace: true });
+      window.location.reload();
+
       return;
     } catch (error) {
       throw new Error(error);
@@ -46,7 +48,9 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("userEmail", response.data.data.email);
       localStorage.setItem("userName", response.data.data.name);
       localStorage.setItem("token", response.headers['access-token']);
-      navigate("/");
+      navigate('/dashboard', { replace: true });
+      window.location.reload();
+
       return;
     } catch (error) {
       throw new Error(error);

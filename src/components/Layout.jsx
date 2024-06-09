@@ -13,8 +13,8 @@ function Layout() {
       <div className="container-scroller">
         <nav className="sidebar sidebar-offcanvas" id="sidebar">
           <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-            <Link className="sidebar-brand brand-logo" to="/"><img src={logo} alt="logo" /></Link>
-            <Link className="sidebar-brand brand-logo-mini" to="/"><img src={logoMini} alt="logo" /></Link>
+            <a className="sidebar-brand brand-logo" href="/dashboard"><img src={logo} alt="logo" /></a>
+            <a className="sidebar-brand brand-logo-mini" href="/dashboard"><img src={logoMini} alt="logo" /></a>
           </div>
           <ul className="nav">
             <li className="nav-item profile">
@@ -34,43 +34,43 @@ function Layout() {
               <span className="nav-link">Navigation</span>
             </li>
             <li className="nav-item menu-items">
-              <Link className="nav-link" to="/">
+              <a className="nav-link" href="/dashboard">
                 <span className="menu-icon">
                   <i className="mdi mdi-speedometer"></i>
                 </span>
                 <span className="menu-title">Dashboard</span>
-              </Link>
+              </a>
             </li>
             <li className="nav-item menu-items">
-              <Link className="nav-link" to="/problems">
+              <a className="nav-link" href="/problems">
                 <span className="menu-icon">
                   <i className="mdi mdi-xml"></i>
                 </span>
                 <span className="menu-title">Problems</span>
-              </Link>
+              </a>
             </li>
             <li className="nav-item menu-items">
-              <Link className="nav-link" to="/about">
+              <a className="nav-link" href="/about">
                 <span className="menu-icon">
                   <i className="mdi mdi-information-outline"></i>
                 </span>
                 <span className="menu-title">About</span>
-              </Link>
+              </a>
             </li>
             <li className="nav-item menu-items">
-              <Link className="nav-link" to="/contacts">
+              <a className="nav-link" href="/contacts">
                 <span className="menu-icon">
                   <i className="mdi mdi-contacts-outline"></i>
                 </span>
                 <span className="menu-title">Contacts</span>
-              </Link>
+              </a>
             </li>
           </ul>
         </nav>
         <div className="container-fluid page-body-wrapper">
           <nav className="navbar p-0 fixed-top d-flex flex-row">
             <div className="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-              <Link className="sidebar-brand brand-logo-mini" to="/"><img src={logoMini} alt="logo" /></Link>
+              <a className="sidebar-brand brand-logo-mini" href="/dashboard"><img src={logoMini} alt="logo" /></a>
             </div>
             <div className="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
               <button className="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -82,15 +82,15 @@ function Layout() {
               </ul>
               <ul className="navbar-nav navbar-nav-right">
                 <li className="nav-item dropdown">
-                  <Link className="nav-link" id="profileDropdown" to="/profile" data-bs-toggle="dropdown">
+                  <a className="nav-link" id="profileDropdown" href="/profile" data-bs-toggle="dropdown">
                     <div className="navbar-profile">
                       <img className="img-xs rounded-circle " src={userLogo} alt={currentUser.name + "Logo"}></img>
                       <p className="mb-0 d-none d-sm-block navbar-profile-name">{currentUser.name}</p>
                       <i className="mdi mdi-menu-down d-none d-sm-block"></i>
                     </div>
-                  </Link>
+                  </a>
                   <div className="dropdown-menu dropdown-menu-end navbar-dropdown preview-list" aria-labelledby="profileDropdown">
-                    <Link className="dropdown-item preview-item" to="/profile">
+                    <a className="dropdown-item preview-item" href="/profile">
                       <div className="preview-thumbnail">
                         <div className="preview-icon bg-dark rounded-circle">
                           <i className="mdi mdi-alien text-success"></i>
@@ -99,7 +99,7 @@ function Layout() {
                       <div className="preview-item-content">
                         <p className="preview-subject mb-1">Profile</p>
                       </div>
-                    </Link> 
+                    </a> 
                     <div className="dropdown-divider"></div>
                     <a className="dropdown-item preview-item" onClick={() => currentUser.logOut()}>
                       <div className="preview-thumbnail">
