@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import About from './components/About';
 import Contacts from './components/Contacts';
 import Problems from './components/Problems';
+import Problem from './components/Problem'; // Добавляем импорт компонента Problem
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Profile from './components/Profile';
@@ -26,6 +27,7 @@ const AppRouter = () => (
             <Route path="about" element={<About />} />
             <Route path="contacts" element={<Contacts />} />
             <Route path="problems" element={<Problems />} />
+            <Route path="problems/:id" element={<Problem />} /> // Добавляем маршрут к компоненту Problem
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" />} />

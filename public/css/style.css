@@ -10215,7 +10215,7 @@ progress {
   --bs-table-active-color: var(--bs-emphasis-color);
   --bs-table-active-bg: rgba(var(--bs-emphasis-color-rgb), 0.1);
   --bs-table-hover-color: var(--bs-emphasis-color);
-  --bs-table-hover-bg: #000000;
+  --bs-table-hover-bg: #181c29;
   width: 100%;
   margin-bottom: 1rem;
   vertical-align: top;
@@ -25134,5 +25134,21 @@ dl li {
 
 .blank-page {
   height: 100vh;
+}
+
+.spiner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.problem-tag {
+  margin: 0px 5px 0px 5px;
+}
+
+.complexity {
+  display: flex;
+  gap: 5px;
 }
 /*# sourceMappingURL=maps/style.css.map */
