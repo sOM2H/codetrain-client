@@ -23585,7 +23585,8 @@ dl li {
 /* === Landing screens === */
 /* Auth */
 .auth.login-bg {
-  background: url("../images/auth/Login_bg.png");
+  /* background: url("../images/auth/Login_bg.png"); */
+  background: #0d1116;
   background-size: cover;
 }
 .auth .login-half-bg {
@@ -25125,7 +25126,7 @@ dl li {
 }
 
 .content-wrapper {
-  background: #000000;
+  background: #0d1116;
   padding: 1.875rem 1.75rem;
   width: 100%;
   -webkit-flex-grow: 1;
