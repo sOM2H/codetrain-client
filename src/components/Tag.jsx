@@ -1,16 +1,16 @@
 import React from "react";
 
-function Tag(props) {
-  const color = {
-    'Strings': "primary",
-    'Algorithms': "danger",
-    'Sorting': "warning",
-    'Graphs': 'info',
-    'For beginners': 'success'
-  }
+export const TagColors = {
+  'Strings': "primary",
+  'Algorithms': "danger",
+  'Sorting': "warning",
+  'Graphs': 'info',
+  'For beginners': 'success'
+};
 
+function Tag(props) {
   return (
-    <div key={props.id} className={"problem-tag badge badge-pill badge-outline-" + (color[props.name] || 'primary')}>
+    <div key={props.id} className={"problem-tag badge badge-pill badge-outline-" + (TagColors[props.name] || 'primary')}>
       {props.name}
     </div>
   );

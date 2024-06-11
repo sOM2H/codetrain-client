@@ -20866,7 +20866,7 @@ code {
 }
 
 .page-header {
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 0.5rem 0;
 }
 .page-header .breadcrumb {
   border: 0;
@@ -25145,7 +25145,7 @@ dl li {
 }
 
 .problem-tag {
-  margin: 2px 5px 2px 5px;
+  margin: 2px 5px 2px 0px;
 }
 
 .complexity {
@@ -25170,31 +25170,44 @@ dl li {
 
 .req-icon {
   color: #0090e7;
-  font-size: 26px;
+  font-size: 20px;
 }
 
 .problem-title {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between !important;
 }
 
 .problem-tags {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
 }
 
+.title-req {
+  display: grid;
+  height: 50px;
+}
+
+.title-com {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin: 10px 0px 10px 0px;
+}
+
 .req-row {
-  justify-content: center;
   align-items: center;
   display: flex;
+  float: right;
   gap: 15px;
 }
 
 .req-text {
   color: white;
   margin-bottom: 0px;
+  font-size: 14px;
 }
 
 .center-text {
@@ -25209,5 +25222,48 @@ dl li {
   padding: 15px;
   background-color: rgb(13, 17, 22);
   color: white;
+}
+
+.poblem-tests-row {
+  margin-bottom: 0px;
+}
+
+.problem-tests-areas {
+  padding: 0.5rem !important;
+}
+
+.problem-tests {
+  margin-bottom: -1px;
+}
+
+.test-textarea {
+  border: 1px solid #0d1116;
+  height: calc(2.25rem + 2px);
+  font-weight: normal;
+  font: menu;
+  font-size: 0.875rem;
+  padding: 0.625rem 0.6875rem;
+  background-color: #2A3038 !important;
+  border-radius: 2px;
+  color: #ffffff;
+  height: 100%;
+}
+
+.problem-description {
+  margin-bottom: 50px;
+}
+
+.problem-description-title {
+  margin-bottom: 20px;
+}
+
+.complexity-title {
+  margin-right: 7px;
+}
+
+.filter-tags {
+  display: flex;
+  gap: 35px;
+  align-items: center;
 }
 /*# sourceMappingURL=maps/style.css.map */
