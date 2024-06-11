@@ -20859,7 +20859,6 @@ pre {
 }
 
 code {
-  padding: 5px;
   color: #fc424a;
   font-weight: 300;
   font-size: 0.875rem;
@@ -25131,13 +25130,14 @@ dl li {
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1;
+  overflow: auto;
 }
 
 .blank-page {
   height: 100vh;
 }
 
-.spiner-wrapper {
+.spinner-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25145,11 +25145,69 @@ dl li {
 }
 
 .problem-tag {
-  margin: 0px 5px 0px 5px;
+  margin: 2px 5px 2px 5px;
 }
 
 .complexity {
   display: flex;
+  color: #0090e7;
   gap: 5px;
+}
+
+.problem-complexity {
+  font-size: 30px;
+  color: #0090e7;
+  display: flex;
+  gap: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.language-select {
+  margin-bottom: 1.5rem;
+}
+
+.req-icon {
+  color: #0090e7;
+  font-size: 26px;
+}
+
+.problem-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.problem-tags {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.req-row {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  gap: 15px;
+}
+
+.req-text {
+  color: white;
+  margin-bottom: 0px;
+}
+
+.center-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.textarea-code-editor {
+  font-family: 'ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace';
+  line-height: 1.5;
+  padding: 15px;
+  background-color: rgb(13, 17, 22);
+  color: white;
 }
 /*# sourceMappingURL=maps/style.css.map */

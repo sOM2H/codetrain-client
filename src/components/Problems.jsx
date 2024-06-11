@@ -20,7 +20,6 @@ function Problems() {
         });
         setTimeout(() => {
           setProblems(response.data);
-          console.log(response.data);
           setLoading(false);
         }, 350);
       } catch (error) {
@@ -33,7 +32,7 @@ function Problems() {
 
   if (loading) {
     return (
-      <div className="spiner-wrapper">
+      <div className="spinner-wrapper">
         <ThreeDots
           visible={true}
           height="80"
@@ -67,7 +66,7 @@ function Problems() {
                   <td>{problem.title}</td>
                   <td>
                     {problem?.tags?.map((tag) => (
-                      <Tag id={tag.id} name={tag.name}/>
+                      <Tag key={tag.id} id={tag.id} name={tag.name} />
                     ))}
                   </td>
                   <td><Complexity complexity={problem.complexity}/></td>
