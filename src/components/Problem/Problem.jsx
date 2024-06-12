@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
 import PageHeader from './PageHeader';
+import ProblemAttempts from './ProblemAttempts';
 import ProblemTests from './ProblemTests';
 import TagList from './TagList';
 import ProblemDescription from './ProblemDescription';
@@ -14,6 +15,7 @@ const Problem = () => {
   const [problem, setProblem] = useState(null);
   const [languages, setLanguages] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lastAttempt, setLastAttempt] = useState(null);
   const params = useParams();
   const { authHeaders } = useAuth();
 
@@ -57,6 +59,27 @@ const Problem = () => {
     fetchLanguages();
   }, [authHeaders]);
 
+  useEffect(() => {
+    const fetchLastAttempt = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/v1/problems/${params.id}/attempts`, {
+          headers: authHeaders(),
+          params: {
+            limit: 1,
+            sort: 'desc',
+          },
+        });
+        if (response.data && response.data.length > 0) {
+          setLastAttempt(response.data[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching last attempt:', error);
+      }
+    };
+
+    fetchLastAttempt();
+  }, [authHeaders, params.id]);
+
   if (loading || !problem) {
     return <Spinner />;
   }
@@ -89,7 +112,6 @@ const Problem = () => {
                 </div>
               </div>
               <ProblemDescription description={problem.description} />
-
               <ProblemTests problemId={problem.id} />
             </div>
           </div>
@@ -98,12 +120,12 @@ const Problem = () => {
           {languages && (
             <div className="card">
               <div className="card-body">
-                <CodeEditorForm languages={languages} />
+                <CodeEditorForm languages={languages} problemId={problem.id} />
               </div>
             </div>
           )}
         </div>
-      </div> 
+      </div>
     </>
   );
 };

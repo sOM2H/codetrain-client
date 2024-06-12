@@ -25289,4 +25289,15 @@ dl li {
   margin-top: 10px;
   gap: 10px;
 }
+
+.last-attempt {
+  margin-bottom: 25px;
+}
+
+.last-attempt-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
 /*# sourceMappingURL=maps/style.css.map */
