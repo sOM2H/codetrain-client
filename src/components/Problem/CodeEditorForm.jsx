@@ -23,7 +23,6 @@ const CodeEditorForm = ({ languages, problemId }) => {
   const navigate = useNavigate();
   const selectedLanguage = watch('language');
 
-
   useEffect(() => {
     const fetchLastAttempt = async () => {
       try {
@@ -52,7 +51,8 @@ const CodeEditorForm = ({ languages, problemId }) => {
         if (languageDetails) {
           setEditorLanguage(languageDetails.css_name);
           setEditorPlaceholder(languageDetails.placeholder);
-          setValue('code', languageCodeMap[selectedLanguage] || languageDetails.placeholder);
+          const currentCode = languageCodeMap[selectedLanguage];
+          setValue('code', currentCode !== undefined ? currentCode : languageDetails.placeholder);
         }
         setLoading(false);
       } catch (err) {
@@ -122,7 +122,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
                     <td>{lastAttempt.id}</td>
                     <td>{lastAttempt.language.name}</td>
                     <td>
-                      <div className={"problem-tag badge badge-pill badge-outline-"+ (lastAttempt.result == "passed" ? "success" : "danger")}>
+                      <div className={"problem-tag badge badge-pill badge-outline-"+ (lastAttempt.result === "passed" ? "success" : "danger")}>
                         {lastAttempt.result}
                       </div>
                     </td>
