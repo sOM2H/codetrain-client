@@ -118,31 +118,32 @@ function Problems() {
           <div className="card-body">
             <h4 className="card-title">Filters</h4>
             <label>Sort by:</label>
-            <div className="filters">
-              <select value={sortBy} onChange={handleSortChange}>
-                <option value="">None</option>
+            <div className='filter-sort-by form-group'>
+              <select className='form-control form-control-sm' value={sortBy} onChange={handleSortChange}>
                 <option value="id">ID</option>
                 <option value="complexity">Complexity</option>
               </select>
-              <select value={sortOrder} onChange={handleOrderChange}>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
+              <select className='form-control form-control-sm' value={sortOrder} onChange={handleOrderChange}>
+                <option value="asc">Asc</option>
+                <option value="desc">Desc</option>
               </select>
             </div>
             <div>
-              <label>Filter by tags:</label>
+              <label>Tags:</label>
               <div className='form-group'>
                 {tags.map((tag) => (
-                  <div key={tag.id} className={"form-check-" + TagColors[tag.name]}>
-                    <Tag key={tag.id} id={tag.id} name={tag.name} />
-                    <label className="form-check-label"/>
-                    <input
-                      className="filter-tags form-check-input"
-                      type="checkbox" 
-                      value={tag.id}
-                      checked={selectedTags.includes(tag.id)}
-                      onChange={handleTagChange}
-                    /> 
+                  <div key={tag.id} className={"form-check form-check-" + TagColors[tag.name]}>
+                    <label className="form-check-label">
+                      <input
+                        className="filter-tags form-check-input"
+                        type="checkbox" 
+                        value={tag.id}
+                        checked={selectedTags.includes(tag.id)}
+                        onChange={handleTagChange}
+                      />
+                      {tag.name}
+                      <i className={"input-helper input-helper-" + TagColors[tag.name]}></i>
+                    </label>
                   </div>
                 ))}
               </div>
