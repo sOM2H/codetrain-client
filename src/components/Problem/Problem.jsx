@@ -15,7 +15,6 @@ const Problem = () => {
   const [problem, setProblem] = useState(null);
   const [languages, setLanguages] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [lastAttempt, setLastAttempt] = useState(null);
   const params = useParams();
   const { authHeaders } = useAuth();
 
@@ -26,7 +25,7 @@ const Problem = () => {
           headers: authHeaders(),
         });
         setTimeout(() => {
-          setProblem(response.data);
+          setProblem(response.data.problem);
           if (response.data) {
             setLoading(false);
           }
@@ -59,26 +58,6 @@ const Problem = () => {
     fetchLanguages();
   }, [authHeaders]);
 
-  useEffect(() => {
-    const fetchLastAttempt = async () => {
-      try {
-        const response = await axiosInstance.get(`/api/v1/problems/${params.id}/attempts`, {
-          headers: authHeaders(),
-          params: {
-            limit: 1,
-            sort: 'desc',
-          },
-        });
-        if (response.data && response.data.length > 0) {
-          setLastAttempt(response.data[0]);
-        }
-      } catch (error) {
-        console.error('Error fetching last attempt:', error);
-      }
-    };
-
-    fetchLastAttempt();
-  }, [authHeaders, params.id]);
 
   if (loading || !problem) {
     return <Spinner />;

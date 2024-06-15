@@ -4,6 +4,8 @@ import axios from 'axios';
 
 const AuthContext = createContext();
 
+let updateAuthStateGlobal;
+
 const AuthProvider = ({ children }) => {
   const [id, setId] = useState(localStorage.getItem("userId") || null);
   const [email, setEmail] = useState(localStorage.getItem("userEmail") || null);
@@ -12,7 +14,7 @@ const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken") || null);
   const [client, setClient] = useState(localStorage.getItem("client") || null);
   const [expiry, setExpiry] = useState(localStorage.getItem("expiry") || null);
-  const [uid, setUid]= useState(localStorage.getItem("uid") || null);
+  const [uid, setUid] = useState(localStorage.getItem("uid") || null);
 
   const navigate = useNavigate();
 
@@ -22,28 +24,40 @@ const AuthProvider = ({ children }) => {
     }
   }, [accessToken, expiry]);
 
+  const updateAuthState = (data) => {
+    const { id, email, name, accessToken, client, expiry, uid } = data;
+
+    setId(id);
+    setEmail(email);
+    setName(name);
+    setAccessToken(accessToken);
+    setClient(client);
+    setExpiry(expiry);
+    setUid(uid);
+
+    localStorage.setItem("userId", id);
+    localStorage.setItem("userEmail", email);
+    localStorage.setItem("userName", name);
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("client", client);
+    localStorage.setItem("expiry", expiry);
+    localStorage.setItem("uid", uid);
+  };
+
+  updateAuthStateGlobal = updateAuthState;
+
   const loginAction = async (data) => {
-    try { 
+    try {
       const response = await axios.post('http://localhost:3000/auth/sign_in', data);
-
-      setId(response.data.data.id);
-      setEmail(response.data.data.email);
-      setName(response.data.data.name);
-
-      setAccessToken(response.headers['access-token']);
-      setClient(response.headers['client']);
-      setExpiry(response.headers['expiry']);
-      setUid(response.headers['uid']);
-
-      localStorage.setItem("userId", response.data.data.id);
-      localStorage.setItem("userEmail", response.data.data.email);
-      localStorage.setItem("userName", response.data.data.name);
-
-      localStorage.setItem("accessToken", response.headers['access-token']);
-      localStorage.setItem("client", response.headers['client']);
-      localStorage.setItem("expiry", response.headers['expiry']);
-      localStorage.setItem("uid", response.headers['uid']);
-
+      updateAuthState({
+        id: response.data.data.id,
+        email: response.data.data.email,
+        name: response.data.data.name,
+        accessToken: response.headers['access-token'],
+        client: response.headers['client'],
+        expiry: response.headers['expiry'],
+        uid: response.headers['uid']
+      });
       navigate('/dashboard', { replace: true });
       window.location.reload();
     } catch (error) {
@@ -54,25 +68,15 @@ const AuthProvider = ({ children }) => {
   const signupAction = async (data) => {
     try {
       const response = await axios.post('http://localhost:3000/auth', data);
-
-      setId(response.data.data.id);
-      setEmail(response.data.data.email);
-      setName(response.data.data.name);
-
-      setAccessToken(response.headers['access-token']);
-      setClient(response.headers['client']);
-      setExpiry(response.headers['expiry']);
-      setUid(response.headers['uid']);
-
-      localStorage.setItem("userId", response.data.data.id);
-      localStorage.setItem("userEmail", response.data.data.email);
-      localStorage.setItem("userName", response.data.data.name);
-
-      localStorage.setItem("accessToken", response.headers['access-token']);
-      localStorage.setItem("client", response.headers['client']);
-      localStorage.setItem("expiry", response.headers['expiry']);
-      localStorage.setItem("uid", response.headers['uid']);
-
+      updateAuthState({
+        id: response.data.data.id,
+        email: response.data.data.email,
+        name: response.data.data.name,
+        accessToken: response.headers['access-token'],
+        client: response.headers['client'],
+        expiry: response.headers['expiry'],
+        uid: response.headers['uid']
+      });
       navigate('/dashboard', { replace: true });
       window.location.reload();
     } catch (error) {
@@ -91,24 +95,15 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
-    setId(null);
-    setEmail(null);
-    setName(null);
-
-    setAccessToken(null);
-    setClient(null);
-    setExpiry(null);
-    setUid(null);
-
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("client");
-    localStorage.removeItem("expiry");
-    localStorage.removeItem("uid");
-
+    updateAuthState({
+      id: null,
+      email: null,
+      name: null,
+      accessToken: null,
+      client: null,
+      expiry: null,
+      uid: null
+    });
     navigate("/login");
   };
 
@@ -121,6 +116,7 @@ const AuthProvider = ({ children }) => {
   );
 };
 
+export { updateAuthStateGlobal };
 export default AuthProvider;
 
 export const useAuth = () => {

@@ -13,8 +13,8 @@ function Layout() {
       <div className="container-scroller">
         <nav className="sidebar sidebar-offcanvas" id="sidebar">
           <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-            <a className="sidebar-brand brand-logo" href="/dashboard"><img src={logo} alt="logo" /></a>
-            <a className="sidebar-brand brand-logo-mini" href="/dashboard"><img src={logoMini} alt="logo" /></a>
+            <a className="sidebar-brand brand-logo brand-logo-text" href="/dashboard">Codetrain</a>
+            <a className="sidebar-brand brand-logo-mini brand-logo-text" href="/dashboard">Ct</a>
           </div>
           <ul className="nav">
             <li className="nav-item profile">
@@ -70,7 +70,7 @@ function Layout() {
         <div className="container-fluid page-body-wrapper">
           <nav className="navbar p-0 fixed-top d-flex flex-row">
             <div className="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-              <a className="sidebar-brand brand-logo-mini" href="/dashboard"><img src={logoMini} alt="logo" /></a>
+              <a className="sidebar-brand brand-logo-mini brand-logo-text" href="/dashboard">Ct</a>
             </div>
             <div className="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
               <button className="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">

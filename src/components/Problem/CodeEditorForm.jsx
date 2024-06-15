@@ -5,6 +5,7 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import Spinner from '../helpers/Spinner';
 import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
+import consumer from '../../utils/cable';
 
 const CodeEditorForm = ({ languages, problemId }) => {
   const { register, handleSubmit, control, setValue, watch } = useForm({
@@ -19,7 +20,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
   const [error, setError] = useState(null);
   const [lastAttempt, setLastAttempt] = useState(null);
   const [languageCodeMap, setLanguageCodeMap] = useState({});
-  const { authHeaders } = useAuth();
+  const { authHeaders, id } = useAuth();
   const navigate = useNavigate();
   const selectedLanguage = watch('language');
 
@@ -43,6 +44,15 @@ const CodeEditorForm = ({ languages, problemId }) => {
 
     fetchLastAttempt();
   }, [authHeaders, problemId]);
+
+  useEffect(() => {
+    consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: problemId, user_id: id }, {
+      received(data) {
+        console.log('Received data:', data);
+        setLastAttempt(data);
+      }
+    });
+  }, [problemId, id]);
 
   useEffect(() => {
     if (languages) {
@@ -115,6 +125,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
                     <th>ID</th>
                     <th>Language</th>
                     <th>Result</th>
+                    <th>Test</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -122,10 +133,13 @@ const CodeEditorForm = ({ languages, problemId }) => {
                     <td>{lastAttempt.id}</td>
                     <td>{lastAttempt.language.name}</td>
                     <td>
-                      <div className={"problem-tag badge badge-pill badge-outline-"+ (lastAttempt.result === "passed" ? "success" : "danger")}>
+                      <div className={"problem-tag badge badge-pill badge-outline-"+ (
+                        lastAttempt.result === "passed" ? "success" : (lastAttempt.result === "running" ? "warning" : "danger")
+                        )}>
                         {lastAttempt.result}
                       </div>
                     </td>
+                    <td>{(lastAttempt.log && lastAttempt.result !== "passed") && lastAttempt.log}</td>
                   </tr>
                 </tbody>
               </table>
@@ -133,15 +147,17 @@ const CodeEditorForm = ({ languages, problemId }) => {
           </div>
         </>
       )}
-
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group language-select">
+        <div className="form-group">
           <label htmlFor="language">Language</label>
-          <select id="language" {...register('language')} className="form-control">
-            {languages.map(language => (
-              <option key={language.id} value={language.css_name}>
-                {language.name}
-              </option>
+          <select
+            id="language"
+            {...register('language')}
+            className="form-control"
+            defaultValue={selectedLanguage}
+          >
+            {languages.map(lang => (
+              <option key={lang.id} value={lang.css_name}>{lang.name}</option>
             ))}
           </select>
         </div>

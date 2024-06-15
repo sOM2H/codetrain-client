@@ -13,6 +13,8 @@ function Problems() {
   const [sortBy, setSortBy] = useState('id');
   const [sortOrder, setSortOrder] = useState('asc');
   const [selectedTags, setSelectedTags] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
   const { authHeaders } = useAuth();
 
@@ -25,11 +27,15 @@ function Problems() {
           params: {
             sort_by: sortBy,
             sort_order: sortOrder,
-            tag_ids: selectedTags.join(',')
+            tag_ids: selectedTags.join(','),
+            page: currentPage
           }
         });
+
         setTimeout(() => {
-          setProblems(response.data);
+          setProblems(response.data.problems);
+          setCurrentPage(response.data.meta.current_page);
+          setTotalPages(response.data.meta.total_pages);
           setLoading(false);
         }, 350);
       } catch (error) {
@@ -38,7 +44,7 @@ function Problems() {
     };
 
     fetchProblems();
-  }, [sortBy, sortOrder, selectedTags, authHeaders]);
+  }, [sortBy, sortOrder, selectedTags, currentPage, authHeaders]);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -46,7 +52,7 @@ function Problems() {
         const response = await axiosInstance.get('/api/v1/tags', {
           headers: authHeaders()
         });
-        setTags(response.data);
+        setTags(response.data.tags);
       } catch (error) {
         console.error('Error fetching tags:', error);
       }
@@ -65,10 +71,45 @@ function Problems() {
 
   const handleTagChange = (e) => {
     const value = parseInt(e.target.value);
+    setCurrentPage(1);
     setSelectedTags((prevTags) =>
       prevTags.includes(value)
         ? prevTags.filter((tag) => tag !== value)
         : [...prevTags, value]
+    );
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
+          <a className="page-link" href="#" onClick={(e) => {e.preventDefault(); handlePageChange(i);}}>
+            {i}
+          </a>
+        </li>
+      );
+    }
+    return (
+      <ul className="pagination">
+        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+          <a className="page-link" href="#" onClick={(e) => {e.preventDefault(); handlePageChange(currentPage - 1);}}>
+            <i className="mdi mdi-chevron-left"></i>
+          </a>
+        </li>
+        {pages}
+        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+          <a className="page-link" href="#" onClick={(e) => {e.preventDefault(); handlePageChange(currentPage + 1);}}>
+            <i className="mdi mdi-chevron-right"></i>
+          </a>
+        </li>
+      </ul>
     );
   };
 
@@ -78,11 +119,10 @@ function Problems() {
         <div className="card">
           <div className="card-body">
             <h4 className="card-title">Problems</h4>
-    
-            { (loading || !problems) 
-              ?
-                <Spinner />
-              :
+
+            {loading || !problems.length ? (
+              <Spinner />
+            ) : (
               <div className="table-responsive">
                 <table className="table table-hover">
                   <thead>
@@ -99,7 +139,7 @@ function Problems() {
                         <td>{problem.id}</td>
                         <td>{problem.title}</td>
                         <td>
-                          {problem?.tags?.map((tag) => (
+                          {problem.tags.map((tag) => (
                             <Tag key={tag.id} id={tag.id} name={tag.name} />
                           ))}
                         </td>
@@ -109,8 +149,11 @@ function Problems() {
                   </tbody>
                 </table>
               </div>
-            }
+            )}
           </div>
+        </div>
+        <div className="pagination-card">
+          {renderPagination()}
         </div>
       </div>
       <div className="col-sm-3">
@@ -150,8 +193,8 @@ function Problems() {
             </div>
           </div>
         </div>
+      </div>
     </div>
-  </div>
   );
 }
 
