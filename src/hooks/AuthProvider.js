@@ -7,14 +7,14 @@ const AuthContext = createContext();
 let updateAuthStateGlobal;
 
 const AuthProvider = ({ children }) => {
-  const [id, setId] = useState(localStorage.getItem("userId") || null);
-  const [email, setEmail] = useState(localStorage.getItem("userEmail") || null);
-  const [name, setName] = useState(localStorage.getItem("userName") || null);
+  const [id, setId] = useState(localStorage.getItem("userId") || "");
+  const [email, setEmail] = useState(localStorage.getItem("userEmail") || "");
+  const [name, setName] = useState(localStorage.getItem("userName") || "");
 
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken") || null);
-  const [client, setClient] = useState(localStorage.getItem("client") || null);
-  const [expiry, setExpiry] = useState(localStorage.getItem("expiry") || null);
-  const [uid, setUid] = useState(localStorage.getItem("uid") || null);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken") || "");
+  const [client, setClient] = useState(localStorage.getItem("client") || "");
+  const [expiry, setExpiry] = useState(localStorage.getItem("expiry") || "");
+  const [uid, setUid] = useState(localStorage.getItem("uid") || "");
 
   const navigate = useNavigate();
 
@@ -96,13 +96,13 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     updateAuthState({
-      id: null,
-      email: null,
-      name: null,
-      accessToken: null,
-      client: null,
-      expiry: null,
-      uid: null
+      id: "",
+      email: "",
+      name: "",
+      accessToken: "",
+      client: "",
+      expiry: "",
+      uid: ""
     });
     navigate("/login");
   };

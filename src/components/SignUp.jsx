@@ -8,7 +8,7 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const auth = useAuth();
 
-  if (auth.token && auth.email){
+  if (auth.accessToken && auth.email){
     return <Navigate to="/dashboard" replace />;
   }
 

@@ -7,20 +7,20 @@ const PrivateRoute = () => {
 
   const user = useAuth();
 
-  if (isTokenExpired) {
-    <Navigate to="/login" />
+  if (!user.accessToken || isTokenExpired(user.expiry)) {
+     return <Navigate to="/login" />
   }
 
-  if (user.accessToken && user.email) {
-    return <Outlet />;
-  }
-
-  <Navigate to="/login" />
+  return <Outlet />;
 };
 
-const isTokenExpired = (exipry) => {
+const isTokenExpired = (expiry) => {
+  if (!expiry) {
+    return true
+  }
+
   const now = Date.now() / 1000;
-  return exipry < now;
+  return expiry < now;
 };
 
 

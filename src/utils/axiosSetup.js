@@ -26,8 +26,12 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.log(error);
-    return Promise.reject(error);
+    if (error.response && error.response.status === 401) {
+      window.location.replace("/login");
+    } else {
+      console.log(error);
+      return Promise.reject(error);
+    }
   }
 );
 

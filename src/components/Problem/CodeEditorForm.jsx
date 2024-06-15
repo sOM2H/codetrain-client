@@ -34,8 +34,8 @@ const CodeEditorForm = ({ languages, problemId }) => {
             sort: 'desc',
           },
         });
-        if (response.data && response.data.length > 0) {
-          setLastAttempt(response.data[0]);
+        if (response.data.attempts && response.data.attempts.length > 0) {
+          setLastAttempt(response.data.attempts[0]);
         }
       } catch (error) {
         console.error('Error fetching last attempt:', error);
@@ -134,12 +134,12 @@ const CodeEditorForm = ({ languages, problemId }) => {
                     <td>{lastAttempt.language.name}</td>
                     <td>
                       <div className={"problem-tag badge badge-pill badge-outline-"+ (
-                        lastAttempt.result === "passed" ? "success" : (lastAttempt.result === "running" ? "warning" : "danger")
+                        lastAttempt.result === "Passed" ? "success" : (lastAttempt.result === "Running" ? "warning" : "danger")
                         )}>
                         {lastAttempt.result}
                       </div>
                     </td>
-                    <td>{(lastAttempt.log && lastAttempt.result !== "passed") && lastAttempt.log}</td>
+                    <td>{(lastAttempt.log && lastAttempt.result !== "Passed") && lastAttempt.log}</td>
                   </tr>
                 </tbody>
               </table>
