@@ -31,7 +31,7 @@ const AppRouter = () => (
             <Route path="problems" element={<Problems />} />
             <Route path="problems/:id" element={<Problem />} />
             <Route path="problems/:id/attempts" element={<Attempts />} />
-            <Route path="problems/:problem_id/attempts/:id" element={<Attempt />} />
+            <Route path="problems/:problem_id/attempts/:attempt_id" element={<Attempt />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" />} />

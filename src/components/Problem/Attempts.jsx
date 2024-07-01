@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
 import Spinner from '../helpers/Spinner';
+import consumer from '../../utils/cable';
 
 function Attempts() {
   const [attempts, setAttempts] = useState([]);
@@ -12,7 +13,7 @@ function Attempts() {
   const [problem, setProblem] = useState();
   const navigate = useNavigate();
   const params = useParams();
-  const { authHeaders } = useAuth();
+  const { authHeaders, id } = useAuth();
 
   useEffect(() => {
     const fetchAttempts = async () => {
@@ -57,6 +58,26 @@ function Attempts() {
     fetchProblem();
   }, [authHeaders, params.id]);
 
+  useEffect(() => {
+    const subscription = consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: params.id, user_id: id }, {
+      received(data) {
+        console.log('Received data:', data);
+        setAttempts((prevAttempts) => {
+          const updatedAttempts = prevAttempts.map((attempt) => 
+            attempt.id === data.id ? data : attempt
+          );
+          if (!updatedAttempts.find((attempt) => attempt.id === data.id)) {
+            updatedAttempts.push(data);
+          }
+          return updatedAttempts;
+        });
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [params.id, id]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {

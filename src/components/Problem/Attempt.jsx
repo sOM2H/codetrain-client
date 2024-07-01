@@ -4,26 +4,26 @@ import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
 import Spinner from '../helpers/Spinner';
 import CodeEditor from '@uiw/react-textarea-code-editor';
-
+import consumer from '../../utils/cable';
 
 function Attempt() {
   const [attempt, setAttempt] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { problem_id, id } = useParams();
+  const { problem_id, attempt_id } = useParams();
   const [problem, setProblem] = useState();
   const navigate = useNavigate();
-  const { authHeaders } = useAuth();
+  const { authHeaders, id } = useAuth();
+
 
   useEffect(() => {
     const fetchAttempt = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`/api/v1/attempts/${id}`, {
+        const response = await axiosInstance.get(`/api/v1/attempts/${attempt_id}`, {
           headers: authHeaders(),
         });
         setAttempt(response.data.attempt);
-        console.log(attempt)
         setLoading(false);
       } catch (error) {
         console.error('Error fetching attempt:', error);
@@ -33,7 +33,7 @@ function Attempt() {
     };
 
     fetchAttempt();
-  }, [id, authHeaders]);
+  }, [attempt_id, authHeaders]);
 
 
   useEffect(() => {
@@ -56,6 +56,14 @@ function Attempt() {
     fetchProblem();
   }, [authHeaders, problem_id]);
 
+  useEffect(() => {
+    consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: problem_id, user_id: id }, {
+      received(data) {
+        console.log('Received data:', data);
+        setAttempt(data);
+      }
+    });
+  }, [problem_id, id]);
 
   if (loading || !attempt || !problem) {
     return <Spinner />;
