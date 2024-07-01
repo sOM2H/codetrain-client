@@ -81,7 +81,7 @@ const ProblemTests = ({ problemId }) => {
               <i className="mdi mdi-information-outline"></i>
               <small> Note </small>
               <p className="mb-0">All inputs are placed in input.txt. All outputs should be placed into output.txt. </p>
-              <p className="mb-0">If your language supports STDIN reading and writing to STDOUT, you can use default functions to get data, and return results (e.g. cin and cout function in C++ ).</p>
+              <p className="mb-0">If your language supports STDIN reading and writing to STDOUT, you can use default functions to get data, and return results (e.g. cin and cout functions in C++ ).</p>
               <p className="mb-0">Otherwise, you have to read and write from files noticed before.</p>
             </blockquote>
           </div>

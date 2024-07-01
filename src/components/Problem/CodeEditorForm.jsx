@@ -131,7 +131,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr key={lastAttempt.id} onClick={() => navigate(`/problem/${problemId}/attempts/${lastAttempt.id}`)}>
+                  <tr key={lastAttempt.id} onClick={() => navigate(`/problems/${problemId}/attempts/${lastAttempt.id}`)}>
                     <td>{lastAttempt.id}</td>
                     <td>{lastAttempt.language.name}</td>
                     <td>

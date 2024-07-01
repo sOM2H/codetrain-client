@@ -6,6 +6,8 @@ import About from './components/About';
 import Contacts from './components/Contacts';
 import Problems from './components/Problems/Problems';
 import Problem from './components/Problem/Problem';
+import Attempts from './components/Problem/Attempts';
+import Attempt from './components/Problem/Attempt';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Profile from './components/Profile';
@@ -28,6 +30,8 @@ const AppRouter = () => (
             <Route path="contacts" element={<Contacts />} />
             <Route path="problems" element={<Problems />} />
             <Route path="problems/:id" element={<Problem />} />
+            <Route path="problems/:id/attempts" element={<Attempts />} />
+            <Route path="problems/:problem_id/attempts/:id" element={<Attempt />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" />} />

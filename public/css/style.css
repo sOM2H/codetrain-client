@@ -25318,6 +25318,10 @@ dl li {
   margin-top: 10px;
 }
 
+.attempt-code {
+  margin-top: 20px;
+}
+
 .pagination .page-item .page-link, .jsgrid .jsgrid-pager .page-item .page-link, .jsgrid .jsgrid-pager .jsgrid-pager-nav-button .page-link, .jsgrid .jsgrid-pager .jsgrid-pager-page .page-link, .jsgrid .jsgrid-pager .jsgrid-pager-nav-button a, .jsgrid .jsgrid-pager .jsgrid-pager-page a {
     border-color: #2c2e33;
     color: #ffffff;

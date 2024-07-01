@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
 import PageHeader from './PageHeader';
-import ProblemAttempts from './ProblemAttempts';
 import ProblemTests from './ProblemTests';
 import TagList from './TagList';
 import ProblemDescription from './ProblemDescription';

@@ -13,7 +13,7 @@ const PageHeader = ({ problem }) => {
             <a className="text-white" href="/problems">Problems</a>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            {problem.title}
+            {problem.id}
           </li>
         </ol>
       </nav>
