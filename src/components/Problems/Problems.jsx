@@ -13,8 +13,8 @@ function Problems() {
   const [sortBy, setSortBy] = useState('id');
   const [sortOrder, setSortOrder] = useState('asc');
   const [selectedTags, setSelectedTags] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
   const { authHeaders } = useAuth();
 
@@ -96,20 +96,25 @@ function Problems() {
         </li>
       );
     }
+
     return (
-      <ul className="pagination">
-        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-          <a className="page-link" href="#" onClick={(e) => {e.preventDefault(); handlePageChange(currentPage - 1);}}>
-            <i className="mdi mdi-chevron-left"></i>
-          </a>
-        </li>
-        {pages}
-        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-          <a className="page-link" href="#" onClick={(e) => {e.preventDefault(); handlePageChange(currentPage + 1);}}>
-            <i className="mdi mdi-chevron-right"></i>
-          </a>
-        </li>
-      </ul>
+      totalPages === 0 ? (
+        <></>
+      ) : (
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <a className="page-link" href="#" onClick={(e) => { e.preventDefault(); handlePageChange(currentPage - 1); }}>
+              <i className="mdi mdi-chevron-left"></i>
+            </a>
+          </li>
+          {pages}
+          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+            <a className="page-link" href="#" onClick={(e) => { e.preventDefault(); handlePageChange(currentPage + 1); }}>
+              <i className="mdi mdi-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+      )
     );
   };
 
@@ -120,34 +125,38 @@ function Problems() {
           <div className="card-body">
             <h4 className="card-title">Problems</h4>
 
-            {loading || !problems.length ? (
+            {loading ? (
               <Spinner />
             ) : (
               <div className="table-responsive">
-                <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>Id</th>
-                      <th>Title</th>
-                      <th>Tags</th>
-                      <th>Complexity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {problems.map((problem) => (
-                      <tr key={problem.id} onClick={() => navigate("/problems/" + problem.id)}>
-                        <td>{problem.id}</td>
-                        <td>{problem.title}</td>
-                        <td>
-                          {problem.tags.map((tag) => (
-                            <Tag key={tag.id} id={tag.id} name={tag.name} />
-                          ))}
-                        </td>
-                        <td><Complexity complexity={problem.complexity} /></td>
+                {problems.length === 0 ? (
+                  <div>No problems found with the selected criteria.</div>
+                ) : (
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Tags</th>
+                        <th>Complexity</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {problems.map((problem) => (
+                        <tr key={problem.id} onClick={() => navigate("/problems/" + problem.id)}>
+                          <td>{problem.id}</td>
+                          <td>{problem.title}</td>
+                          <td>
+                            {problem.tags.map((tag) => (
+                              <Tag key={tag.id} id={tag.id} name={tag.name} />
+                            ))}
+                          </td>
+                          <td><Complexity complexity={problem.complexity} /></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             )}
           </div>
