@@ -107,6 +107,8 @@ const CodeEditorForm = ({ languages, problemId }) => {
     return <div className="error">{error}</div>;
   }
 
+  const isSubmitDisabled = lastAttempt && (lastAttempt.result === "Pending" || lastAttempt.result === "Running");
+
   return (
     <>
       {lastAttempt && (
@@ -184,7 +186,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
             )}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary" disabled={isSubmitDisabled}>Submit</button>
       </form>
     </>
   );
