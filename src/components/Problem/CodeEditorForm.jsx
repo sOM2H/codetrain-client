@@ -182,6 +182,9 @@ const CodeEditorForm = ({ languages, problemId }) => {
                   fontSize: '14px'
                 }}
                 className="textarea-code-editor"
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
               />
             )}
           />

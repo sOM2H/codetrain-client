@@ -184,7 +184,7 @@ function Problems() {
               <label>Tags:</label>
               <div className='form-group'>
                 {tags.map((tag) => (
-                  <div key={tag.id} className={"form-check form-check-" + TagColors[tag.name]}>
+                  <div key={tag.id} className={"form-check form-check-" + TagColors[tag.id % 8]}>
                     <label className="form-check-label">
                       <input
                         className="filter-tags form-check-input"
@@ -194,7 +194,7 @@ function Problems() {
                         onChange={handleTagChange}
                       />
                       {tag.name}
-                      <i className={"input-helper input-helper-" + TagColors[tag.name]}></i>
+                      <i className={"input-helper input-helper-" + TagColors[tag.id % 8]}></i>
                     </label>
                   </div>
                 ))}

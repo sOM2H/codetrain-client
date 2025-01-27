@@ -25126,7 +25126,7 @@ dl li {
 
 .content-wrapper {
   background: #0d1116;
-  padding: 1.875rem 1.75rem;
+  padding: 0.875rem 1.75rem;
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1;
@@ -25342,6 +25342,37 @@ dl li {
     background: #0090e7;
     border-color: #0090e7;
     color: color(white);
+}
+
+.badge-outline-orang1 {
+  color: #ff5733;
+  border: 1px solid #ff5733;
+}
+
+.input-helper-orang1::before{
+  border-color: #ff5733 !important;
+}
+
+.badge-outline-pink1 {
+  color: #ff3383;
+  border: 1px solid #ff3383;
+}
+
+.input-helper-pink1::before{
+  border-color: #ff3383 !important;
+}
+
+.badge-outline-mint1 {
+  color: #33ff9f;
+  border: 1px solid #33ff9f;
+}
+
+.input-helper-mint1::before{
+  border-color: #33ff9f !important;
+}
+
+body {
+  background: #0d1116;
 }
 
 /*# sourceMappingURL=maps/style.css.map */
