@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
 import Spinner from '../helpers/Spinner';
@@ -8,6 +8,25 @@ const ProblemTests = ({ problemId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { authHeaders } = useAuth();
+  const rowRefs = useRef([]);
+
+  const syncHeights = useCallback(() => {
+    if (rowRefs.current.length > 0) {
+      rowRefs.current.forEach((row) => {
+        if (row) {
+          const textareas = row.querySelectorAll('textarea');
+          if (textareas.length === 2) {
+            const maxHeight = Math.max(
+              textareas[0].scrollHeight,
+              textareas[1].scrollHeight
+            );
+            textareas[0].style.height = `${maxHeight}px`;
+            textareas[1].style.height = `${maxHeight}px`;
+          }
+        }
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const fetchTests = async () => {
@@ -27,6 +46,13 @@ const ProblemTests = ({ problemId }) => {
     fetchTests();
   }, [authHeaders, problemId]);
 
+  useEffect(() => {
+    syncHeights();
+
+    window.addEventListener('resize', syncHeights);
+    return () => window.removeEventListener('resize', syncHeights);
+  }, [tests, syncHeights]);
+
   if (loading) {
     return <Spinner />;
   }
@@ -37,7 +63,7 @@ const ProblemTests = ({ problemId }) => {
 
   return (
     <>
-      { (tests && tests.length > 0) && (
+      {tests && tests.length > 0 && (
         <>
           <h4>Test examples</h4>
           <div className="problem-tests">
@@ -50,25 +76,37 @@ const ProblemTests = ({ problemId }) => {
                 </tr>
               </thead>
               <tbody>
-                {tests?.map((test, index) => (
-                  <tr key={index} className="form-group problem-tests-row">
+                {tests.map((test, index) => (
+                  <tr
+                    key={index}
+                    ref={(el) => (rowRefs.current[index] = el)}
+                    className="form-group problem-tests-row"
+                  >
                     <th scope="row">{index + 1}</th>
                     <td className="problem-tests-areas">
                       <textarea
                         className="form-control test-textarea"
-                        id={"area_input_" + index}
-                        spellCheck="false"
                         defaultValue={test.input}
+                        spellCheck="false"
                         disabled
+                        style={{
+                          overflow: 'hidden',
+                          resize: 'none',
+                          width: '100%',
+                        }}
                       ></textarea>
                     </td>
                     <td className="problem-tests-areas">
                       <textarea
                         className="form-control test-textarea"
-                        id={"area_output_" + index}
-                        spellCheck="false"
                         defaultValue={test.output}
+                        spellCheck="false"
                         disabled
+                        style={{
+                          overflow: 'hidden',
+                          resize: 'none',
+                          width: '100%',
+                        }}
                       ></textarea>
                     </td>
                   </tr>
@@ -80,14 +118,20 @@ const ProblemTests = ({ problemId }) => {
             <blockquote className="blockquote text-muted">
               <i className="mdi mdi-information-outline"></i>
               <small> Note </small>
-              <p className="mb-0">All inputs are placed in input.txt. All outputs should be placed into output.txt. </p>
-              <p className="mb-0">If your language supports STDIN reading and writing to STDOUT, you can use default functions to get data, and return results (e.g. cin and cout functions in C++ ).</p>
-              <p className="mb-0">Otherwise, you have to read and write from files noticed before.</p>
+              <p className="mb-0">
+                All inputs are placed in input.txt. All outputs should be put into output.txt.
+              </p>
+              <p className="mb-0">
+                If your language supports STDIN reading and writing to STDOUT, you can use default
+                functions to get data, and return results (e.g. cin and cout functions in C++ ).
+              </p>
+              <p className="mb-0">
+                Otherwise, you have to read and write from input.txt and output.txt files.
+              </p>
             </blockquote>
           </div>
         </>
       )}
-   
     </>
   );
 };

@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/AuthProvider';
 import Tag, { TagColors } from '../Tag';
 import Complexity from '../Complexity';
 import Spinner from '../helpers/Spinner';
+import Score from '../Problem/Score';
 
 function Problems() {
   const [problems, setProblems] = useState([]);
@@ -139,6 +140,7 @@ function Problems() {
                         <th>Title</th>
                         <th>Tags</th>
                         <th>Complexity</th>
+                        <th>Score</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -152,6 +154,7 @@ function Problems() {
                             ))}
                           </td>
                           <td><Complexity complexity={problem.complexity} /></td>
+                          <td><Score value={problem.max_score} /></td>
                         </tr>
                       ))}
                     </tbody>

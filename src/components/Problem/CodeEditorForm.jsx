@@ -6,6 +6,7 @@ import Spinner from '../helpers/Spinner';
 import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
 import consumer from '../../utils/cable';
+import Score from './Score';
 
 const CodeEditorForm = ({ languages, problemId }) => {
   const { register, handleSubmit, control, setValue, watch } = useForm({
@@ -73,6 +74,17 @@ const CodeEditorForm = ({ languages, problemId }) => {
     }
   }, [selectedLanguage, languages, setValue, languageCodeMap]);
 
+  useEffect(() => {
+    if (lastAttempt) {
+      const languageDetails = languages.find(lang => lang.id === lastAttempt.language.id);
+      if (languageDetails) {
+        setValue('language', languageDetails.css_name);
+        setValue('code', lastAttempt.code);
+        setEditorLanguage(languageDetails.css_name);
+      }
+    }
+  }, [lastAttempt, languages, setValue]);
+
   const handleCodeChange = (code) => {
     setLanguageCodeMap(prevMap => ({
       ...prevMap,
@@ -128,6 +140,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
                     <th>Language</th>
                     <th>Result</th>
                     <th>Test</th>
+                    <th>Score</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -142,6 +155,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
                       </div>
                     </td>
                     <td>{(lastAttempt.log && lastAttempt.result !== "Passed") && lastAttempt.log}</td>
+                    <td><Score value={lastAttempt.rounded_score} /></td>
                   </tr>
                 </tbody>
               </table>

@@ -4,6 +4,7 @@ import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
 import Spinner from '../helpers/Spinner';
 import CodeEditor from '@uiw/react-textarea-code-editor';
+import Score from './Score';
 import consumer from '../../utils/cable';
 
 function Attempt() {
@@ -100,6 +101,7 @@ function Attempt() {
                   <th>Language</th>
                   <th>Result</th>
                   <th>Test</th>
+                  <th>Score</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,6 +116,7 @@ function Attempt() {
                     </div>
                   </td>
                   <td>{(attempt.log && attempt.result !== "Passed") && attempt.log}</td>
+                  <td><Score value={attempt.rounded_score} /></td>
                 </tr>
               </tbody>
             </table>

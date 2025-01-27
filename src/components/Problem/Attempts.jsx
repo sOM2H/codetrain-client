@@ -4,6 +4,7 @@ import axiosInstance from '../../utils/axiosSetup';
 import { useAuth } from '../../hooks/AuthProvider';
 import Spinner from '../helpers/Spinner';
 import consumer from '../../utils/cable';
+import Score from './Score';
 
 function Attempts() {
   const [attempts, setAttempts] = useState([]);
@@ -150,6 +151,7 @@ function Attempts() {
                   <th>Language</th>
                   <th>Result</th>
                   <th>Test</th>
+                  <th>Score</th>
                 </tr>
               </thead>
               <tbody>
@@ -165,6 +167,7 @@ function Attempts() {
                       </div>
                     </td>
                     <td>{(attempt.log && attempt.result !== "Passed") && attempt.log}</td>
+                    <td><Score value={attempt.rounded_score} /></td>
                   </tr>
                 ))}
               </tbody>

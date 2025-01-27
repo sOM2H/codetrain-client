@@ -25230,6 +25230,12 @@ dl li {
 
 .problem-tests-areas {
   padding: 0.5rem !important;
+
+  textarea {
+    font-size: 0.875rem;
+    text-shadow: none;
+    font-family: monospace;
+  }
 }
 
 .problem-tests {
@@ -25369,6 +25375,27 @@ dl li {
 
 .input-helper-mint1::before{
   border-color: #33ff9f !important;
+}
+
+.score-green {
+  color: #00d25b;
+  font-weight: bold;
+}
+
+.score-yellow {
+  color: #ffab00;
+}
+
+.score-orange {
+  color: #ff5733;
+}
+
+.score-red {
+  color: #fc424a; 
+}
+
+.table {
+  padding: 0.7rem !important;
 }
 
 body {
