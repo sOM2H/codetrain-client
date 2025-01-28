@@ -78,9 +78,11 @@ const CodeEditorForm = ({ languages, problemId }) => {
     if (lastAttempt) {
       const languageDetails = languages.find(lang => lang.id === lastAttempt.language.id);
       if (languageDetails) {
+        setLanguageCodeMap(prevMap => ({
+          ...prevMap,
+          [languageDetails.css_name]: lastAttempt.code
+        }));
         setValue('language', languageDetails.css_name);
-        setValue('code', lastAttempt.code);
-        setEditorLanguage(languageDetails.css_name);
       }
     }
   }, [lastAttempt, languages, setValue]);

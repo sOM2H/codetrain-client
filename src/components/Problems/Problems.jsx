@@ -165,7 +165,10 @@ function Problems() {
           </div>
         </div>
         <div className="pagination-card">
-          {renderPagination()}
+          {!loading ? (
+             renderPagination()
+            ) : null
+          }
         </div>
       </div>
       <div className="col-sm-3">
