@@ -8,7 +8,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const auth = useAuth();
 
-  if (auth.accessToken && auth.email){
+  if (auth.accessToken && auth.login){
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -18,7 +18,7 @@ const Login = () => {
     try {
       await auth.loginAction(data)
     } catch (error) {
-     setErrorMessage('Invalid email or password');
+     setErrorMessage('Invalid login or password');
     }
   };
 
@@ -38,14 +38,14 @@ const Login = () => {
                     </div>
                   )}
                   <div className="form-group">
-                    <label>Email *</label>
+                    <label>Login *</label>
                     <input
                       className="form-control p_input"
-                      id="email"
-                      type="email"
-                      {...register('email', { required: 'Email is required' })}
+                      id="login"
+                      type="text"
+                      {...register('login', { required: 'Login is required' })}
                     />
-                    {errors.email && <p>{errors.email.message}</p>}
+                    {errors.login && <p>{errors.login.message}</p>}
                   </div>
                   <div className="form-group">
                     <label>Password *</label>

@@ -13,8 +13,8 @@ axiosInstance.interceptors.response.use(
     if (response.headers['access-token']) {
       const authData = {
         id: localStorage.getItem("userId"),
-        email: localStorage.getItem("userEmail"),
-        name: localStorage.getItem("userName"),
+        login: localStorage.getItem("userLogin"),
+        full_name: localStorage.getItem("userFullName"),
         accessToken: response.headers['access-token'],
         client: response.headers['client'],
         expiry: response.headers['expiry'],

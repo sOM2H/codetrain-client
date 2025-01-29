@@ -8,8 +8,8 @@ let updateAuthStateGlobal;
 
 const AuthProvider = ({ children }) => {
   const [id, setId] = useState(localStorage.getItem("userId") || "");
-  const [email, setEmail] = useState(localStorage.getItem("userEmail") || "");
-  const [name, setName] = useState(localStorage.getItem("userName") || "");
+  const [login, setLogin] = useState(localStorage.getItem("userLogin") || "");
+  const [full_name, setFullName] = useState(localStorage.getItem("userFullName") || "");
 
   const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken") || "");
   const [client, setClient] = useState(localStorage.getItem("client") || "");
@@ -25,19 +25,19 @@ const AuthProvider = ({ children }) => {
   }, [accessToken, expiry]);
 
   const updateAuthState = (data) => {
-    const { id, email, name, accessToken, client, expiry, uid } = data;
+    const { id, login, full_name, accessToken, client, expiry, uid } = data;
 
     setId(id);
-    setEmail(email);
-    setName(name);
+    setLogin(login);
+    setFullName(full_name);
     setAccessToken(accessToken);
     setClient(client);
     setExpiry(expiry);
     setUid(uid);
 
     localStorage.setItem("userId", id);
-    localStorage.setItem("userEmail", email);
-    localStorage.setItem("userName", name);
+    localStorage.setItem("userLogin", login);
+    localStorage.setItem("userFullName", full_name);
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("client", client);
     localStorage.setItem("expiry", expiry);
@@ -51,8 +51,8 @@ const AuthProvider = ({ children }) => {
       const response = await axios.post('http://localhost:3000/auth/sign_in', data);
       updateAuthState({
         id: response.data.data.id,
-        email: response.data.data.email,
-        name: response.data.data.name,
+        login: response.data.data.login,
+        full_name: response.data.data.full_name,
         accessToken: response.headers['access-token'],
         client: response.headers['client'],
         expiry: response.headers['expiry'],
@@ -70,8 +70,8 @@ const AuthProvider = ({ children }) => {
       const response = await axios.post('http://localhost:3000/auth', data);
       updateAuthState({
         id: response.data.data.id,
-        email: response.data.data.email,
-        name: response.data.data.name,
+        login: response.data.data.login,
+        full_name: response.data.data.full_name,
         accessToken: response.headers['access-token'],
         client: response.headers['client'],
         expiry: response.headers['expiry'],
@@ -97,8 +97,8 @@ const AuthProvider = ({ children }) => {
   const logOut = () => {
     updateAuthState({
       id: "",
-      email: "",
-      name: "",
+      login: "",
+      full_name: "",
       accessToken: "",
       client: "",
       expiry: "",
@@ -109,7 +109,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ accessToken, client, expiry, uid, authHeaders,
-                                   id, email, name,
+                                   id, login, full_name,
                                    loginAction, signupAction, logOut }}>
       {children}
     </AuthContext.Provider>

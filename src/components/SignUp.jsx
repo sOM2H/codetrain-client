@@ -8,7 +8,7 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const auth = useAuth();
 
-  if (auth.accessToken && auth.email){
+  if (auth.accessToken && auth.login){
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -18,7 +18,7 @@ const SignUp = () => {
     try {
       await auth.signupAction(data)
     } catch (error) {
-     setErrorMessage('This email address has been already taken by another user');
+     setErrorMessage('This login address has been already taken by another user');
     }
   };
 
@@ -38,24 +38,24 @@ const SignUp = () => {
                     </div>
                   )}
                   <div className="form-group">
-                    <label>Name *</label>
+                    <label>Full Name *</label>
                     <input
                       className="form-control p_input"
-                      id="name"
+                      id="full_name"
                       type="text"
-                      {...register('name', { required: 'Name is required' })}
+                      {...register('full_name', { required: 'Full Name is required' })}
                     />
-                    {errors.name && <p>{errors.name.message}</p>}
+                    {errors.full_name && <p>{errors.full_name.message}</p>}
                   </div>
                   <div className="form-group">
-                    <label>Email *</label>
+                    <label>Login *</label>
                     <input
                       className="form-control p_input"
-                      id="email"
-                      type="email"
-                      {...register('email', { required: 'Email is required' })}
+                      id="login"
+                      type="text"
+                      {...register('login', { required: 'Login is required' })}
                     />
-                    {errors.email && <p>{errors.email.message}</p>}
+                    {errors.login && <p>{errors.login.message}</p>}
                   </div>
                   <div className="form-group">
                     <label>Password *</label>

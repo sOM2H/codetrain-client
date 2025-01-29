@@ -7,11 +7,11 @@ const Profile = () => {
   return (
     <div className="container">
       <header className="jumbotron">
-        <h3>
+        <div>
           <strong> Profile </strong>
-          Token: {currentUser?.token}
-          Email: {currentUser?.email}
-        </h3>
+          <p>Login: {currentUser?.login}</p>
+          <p>Full Name: {currentUser?.full_name}</p>
+        </div>
       </header>
     </div>
   );
