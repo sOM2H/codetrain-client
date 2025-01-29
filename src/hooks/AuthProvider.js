@@ -1,5 +1,6 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 
 const AuthContext = createContext();
@@ -7,59 +8,75 @@ const AuthContext = createContext();
 let updateAuthStateGlobal;
 
 const AuthProvider = ({ children }) => {
-  const [id, setId] = useState(localStorage.getItem("userId") || "");
-  const [login, setLogin] = useState(localStorage.getItem("userLogin") || "");
-  const [full_name, setFullName] = useState(localStorage.getItem("userFullName") || "");
-
   const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken") || "");
-  const [client, setClient] = useState(localStorage.getItem("client") || "");
-  const [expiry, setExpiry] = useState(localStorage.getItem("expiry") || "");
-  const [uid, setUid] = useState(localStorage.getItem("uid") || "");
+  const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken") || "");
+
+  const getUserFromToken = (token) => {
+    if (!token) return null;
+    try {
+      const decoded = jwtDecode(token);
+      return {
+        id: decoded.id,
+        login: decoded.login,
+        full_name: decoded.full_name,
+        role: decoded.roles[0]?.name,
+        organization: decoded.organization,
+        sub: decoded.sub,
+        scp: decoded.scp,
+        aud: decoded.aud,
+        iat: decoded.iat,
+        exp: decoded.exp,
+        jti: decoded.jti,
+      };
+    } catch (e) {
+      console.error("Invalid token", e);
+      return null;
+    }
+  };
+
+  const [currentUser, setCurrentUser] = useState(accessToken ? getUserFromToken(accessToken) : null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (accessToken && Date.now() / 1000 > parseInt(expiry, 10)) {
-      logOut();
+    if (accessToken) {
+      const userData = getUserFromToken(accessToken);
+      if (userData) {
+        setCurrentUser(userData);
+      }
     }
-  }, [accessToken, expiry]);
+  }, [accessToken]);
 
   const updateAuthState = (data) => {
-    const { id, login, full_name, accessToken, client, expiry, uid } = data;
+    const { accessToken, refreshToken } = data;
 
-    setId(id);
-    setLogin(login);
-    setFullName(full_name);
     setAccessToken(accessToken);
-    setClient(client);
-    setExpiry(expiry);
-    setUid(uid);
+    setRefreshToken(refreshToken);
 
-    localStorage.setItem("userId", id);
-    localStorage.setItem("userLogin", login);
-    localStorage.setItem("userFullName", full_name);
     localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("client", client);
-    localStorage.setItem("expiry", expiry);
-    localStorage.setItem("uid", uid);
+    localStorage.setItem("refreshToken", refreshToken);
+
+    const userData = getUserFromToken(accessToken);
+    setCurrentUser(userData);
   };
 
   updateAuthStateGlobal = updateAuthState;
 
+  const authHeaders = () => {
+    return {
+      'Authorization': `Bearer ${accessToken}`,
+    };
+  };
+
   const loginAction = async (data) => {
     try {
-      const response = await axios.post('http://localhost:3000/auth/sign_in', data);
+      const response = await axios.post('http://localhost:3000/users/sign_in', data);
       updateAuthState({
-        id: response.data.data.id,
-        login: response.data.data.login,
-        full_name: response.data.data.full_name,
-        accessToken: response.headers['access-token'],
-        client: response.headers['client'],
-        expiry: response.headers['expiry'],
-        uid: response.headers['uid']
+        accessToken: response.data.access_token,
+        refreshToken: response.data.refresh_token,
       });
+      console.log(currentUser)
       navigate('/dashboard', { replace: true });
-      window.location.reload();
     } catch (error) {
       throw new Error(error);
     }
@@ -67,50 +84,31 @@ const AuthProvider = ({ children }) => {
 
   const signupAction = async (data) => {
     try {
-      const response = await axios.post('http://localhost:3000/auth', data);
+      const response = await axios.post('http://localhost:3000/users', data);
       updateAuthState({
-        id: response.data.data.id,
-        login: response.data.data.login,
-        full_name: response.data.data.full_name,
-        accessToken: response.headers['access-token'],
-        client: response.headers['client'],
-        expiry: response.headers['expiry'],
-        uid: response.headers['uid']
+        accessToken: response.data.access_token,
+        refreshToken: response.data.refresh_token,
       });
       navigate('/dashboard', { replace: true });
-      window.location.reload();
     } catch (error) {
       throw new Error(error);
     }
   };
 
-  const authHeaders = () => {
-    return {
-      'access-token': accessToken,
-      'token-type': "Bearer",
-      'client': client,
-      'expiry': expiry,
-      'uid': uid
-    };
-  };
-
   const logOut = () => {
     updateAuthState({
-      id: "",
-      login: "",
-      full_name: "",
       accessToken: "",
-      client: "",
-      expiry: "",
-      uid: ""
+      refreshToken: "",
     });
+    setCurrentUser(null);
     navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, client, expiry, uid, authHeaders,
-                                   id, login, full_name,
-                                   loginAction, signupAction, logOut }}>
+    <AuthContext.Provider value={{
+      accessToken, refreshToken, authHeaders,
+      currentUser, loginAction, signupAction, logOut
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -6,9 +6,9 @@ import { Navigate } from 'react-router-dom';
 const SignUp = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
-  const auth = useAuth();
+  const { accessToken, currentUser, signupAction} = useAuth();
 
-  if (auth.accessToken && auth.login){
+  if (accessToken && currentUser){
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -16,7 +16,7 @@ const SignUp = () => {
     setErrorMessage(null);
 
     try {
-      await auth.signupAction(data)
+      await signupAction(data)
     } catch (error) {
      setErrorMessage('This login address has been already taken by another user');
     }

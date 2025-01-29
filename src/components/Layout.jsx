@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/AuthProvider';
 import Identicon from 'react-identicons';
 
 function Layout() {
-  const currentUser = useAuth();
+  const { logOut, currentUser } = useAuth();
 
   return (
     <>
@@ -19,10 +19,10 @@ function Layout() {
               <div className="profile-desc">
                 <div className="profile-pic">
                   <div className="count-indicator">
-                    <Identicon string={currentUser.full_name} size="30"/>
+                    <Identicon string={currentUser?.full_name} size="30"/>
                   </div>
                   <div className="profile-name">
-                    <h5 className="mb-0 font-weight-normal">{currentUser.full_name}</h5>
+                    <h5 className="mb-0 font-weight-normal">{currentUser?.full_name}</h5>
                   </div>
                 </div>
               </div>
@@ -81,8 +81,8 @@ function Layout() {
                 <li className="nav-item dropdown">
                   <a className="nav-link" id="profileDropdown" href="/profile" data-bs-toggle="dropdown">
                     <div className="navbar-profile">
-                      <Identicon string={currentUser.full_name} size="30"/>
-                      <p className="mb-0 d-none d-sm-block navbar-profile-name">{currentUser.full_name}</p>
+                      <Identicon string={currentUser?.full_name} size="30"/>
+                      <p className="mb-0 d-none d-sm-block navbar-profile-name">{currentUser?.full_name}</p>
                       <i className="mdi mdi-menu-down d-none d-sm-block"></i>
                     </div>
                   </a>
@@ -98,7 +98,7 @@ function Layout() {
                       </div>
                     </a> 
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item preview-item" onClick={() => currentUser.logOut()}>
+                    <a className="dropdown-item preview-item" onClick={() => logOut()}>
                       <div className="preview-thumbnail">
                         <div className="preview-icon bg-dark rounded-circle">
                           <i className="mdi mdi-logout text-danger"></i>

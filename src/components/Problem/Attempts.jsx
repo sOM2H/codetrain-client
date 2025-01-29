@@ -14,7 +14,7 @@ function Attempts() {
   const [problem, setProblem] = useState();
   const navigate = useNavigate();
   const params = useParams();
-  const { authHeaders, id } = useAuth();
+  const { authHeaders, currentUser } = useAuth();
 
   useEffect(() => {
     const fetchAttempts = async () => {
@@ -60,7 +60,7 @@ function Attempts() {
   }, [authHeaders, params.id]);
 
   useEffect(() => {
-    const subscription = consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: params.id, user_id: id }, {
+    const subscription = consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: params.id, user_id: currentUser.id }, {
       received(data) {
         console.log('Received data:', data);
         setAttempts((prevAttempts) => {
@@ -78,7 +78,7 @@ function Attempts() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [params.id, id]);
+  }, [params.id, currentUser.id]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {

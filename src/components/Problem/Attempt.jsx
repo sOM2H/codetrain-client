@@ -14,7 +14,7 @@ function Attempt() {
   const { problem_id, attempt_id } = useParams();
   const [problem, setProblem] = useState();
   const navigate = useNavigate();
-  const { authHeaders, id } = useAuth();
+  const { authHeaders, currentUser } = useAuth();
 
 
   useEffect(() => {
@@ -58,13 +58,13 @@ function Attempt() {
   }, [authHeaders, problem_id]);
 
   useEffect(() => {
-    consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: problem_id, user_id: id }, {
+    consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: problem_id, user_id: currentUser.id }, {
       received(data) {
         console.log('Received data:', data);
         setAttempt(data);
       }
     });
-  }, [problem_id, id]);
+  }, [problem_id, currentUser.id]);
 
   if (loading || !attempt || !problem) {
     return <Spinner />;

@@ -1,27 +1,31 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
-
 import { useAuth } from "../../hooks/AuthProvider";
 
 const PrivateRoute = () => {
+  const { accessToken, currentUser } = useAuth();
 
-  const user = useAuth();
+  if (accessToken === "" || currentUser === null) {
+    return <Navigate to="/login" />;
+  }
 
-  if (!user.accessToken || isTokenExpired(user.expiry)) {
-     return <Navigate to="/login" />
+  if (isTokenExpired(accessToken)) {
+    return <Navigate to="/login" />;
   }
 
   return <Outlet />;
 };
 
-const isTokenExpired = (expiry) => {
-  if (!expiry) {
-    return true
+const isTokenExpired = (token) => {
+  if (!token) return true;
+
+  try {
+    const { exp } = JSON.parse(atob(token.split(".")[1]));
+    return exp < Date.now() / 1000;
+  } catch (error) {
+    console.error("Invalid token", error);
+    return true;
   }
-
-  const now = Date.now() / 1000;
-  return expiry < now;
 };
-
 
 export default PrivateRoute;

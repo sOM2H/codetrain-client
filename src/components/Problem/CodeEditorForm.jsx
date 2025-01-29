@@ -21,7 +21,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
   const [error, setError] = useState(null);
   const [lastAttempt, setLastAttempt] = useState(null);
   const [languageCodeMap, setLanguageCodeMap] = useState({});
-  const { authHeaders, id } = useAuth();
+  const { authHeaders, currentUser } = useAuth();
   const navigate = useNavigate();
   const selectedLanguage = watch('language');
 
@@ -58,13 +58,13 @@ const CodeEditorForm = ({ languages, problemId }) => {
   }, [authHeaders, problemId]);
 
   useEffect(() => {
-    consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: problemId, user_id: id }, {
+    consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: problemId, user_id: currentUser.id }, {
       received(data) {
         console.log('Received data:', data);
         setLastAttempt(data);
       }
     });
-  }, [problemId, id]);
+  }, [problemId, currentUser.id]);
 
   useEffect(() => {
     if (languages) {

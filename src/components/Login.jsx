@@ -6,9 +6,9 @@ import { Navigate } from 'react-router-dom';
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
-  const auth = useAuth();
+  const { accessToken, currentUser, loginAction} = useAuth();
 
-  if (auth.accessToken && auth.login){
+  if (accessToken && currentUser){
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -16,7 +16,7 @@ const Login = () => {
     setErrorMessage(null);
 
     try {
-      await auth.loginAction(data)
+      await loginAction(data)
     } catch (error) {
      setErrorMessage('Invalid login or password');
     }
