@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthProvider';
-import userLogo from '../assets/images/user_image.jpg';
-import logo from '../assets/images/logo.png';
-import logoMini from '../assets/images/logo-mini.png';
+import Identicon from 'react-identicons';
 
 function Layout() {
   const currentUser = useAuth();
@@ -21,8 +19,7 @@ function Layout() {
               <div className="profile-desc">
                 <div className="profile-pic">
                   <div className="count-indicator">
-                    <img className="img-xs rounded-circle " src={userLogo} alt={currentUser.name + "Logo"}></img>
-                    <span className="count bg-success"></span>
+                    <Identicon string={currentUser.name} size="30"/>
                   </div>
                   <div className="profile-name">
                     <h5 className="mb-0 font-weight-normal">{currentUser.name}</h5>
@@ -84,7 +81,7 @@ function Layout() {
                 <li className="nav-item dropdown">
                   <a className="nav-link" id="profileDropdown" href="/profile" data-bs-toggle="dropdown">
                     <div className="navbar-profile">
-                      <img className="img-xs rounded-circle " src={userLogo} alt={currentUser.name + "Logo"}></img>
+                      <Identicon string={currentUser.name} size="30"/>
                       <p className="mb-0 d-none d-sm-block navbar-profile-name">{currentUser.name}</p>
                       <i className="mdi mdi-menu-down d-none d-sm-block"></i>
                     </div>
