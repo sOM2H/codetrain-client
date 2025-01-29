@@ -25,6 +25,17 @@ const CodeEditorForm = ({ languages, problemId }) => {
   const navigate = useNavigate();
   const selectedLanguage = watch('language');
 
+  const handleExampleClick = () => {
+    const languageDetails = languages.find(lang => lang.css_name === selectedLanguage);
+    if (languageDetails) {
+      setLanguageCodeMap(prevMap => ({
+        ...prevMap,
+        [languageDetails.css_name]: languageDetails.placeholder
+      }));
+      setValue('code', languageDetails.placeholder);
+    }
+  };
+
   useEffect(() => {
     const fetchLastAttempt = async () => {
       try {
@@ -61,9 +72,9 @@ const CodeEditorForm = ({ languages, problemId }) => {
         const languageDetails = languages.find(lang => lang.css_name === selectedLanguage);
         if (languageDetails) {
           setEditorLanguage(languageDetails.css_name);
-          setEditorPlaceholder(languageDetails.placeholder);
+          // setEditorPlaceholder(languageDetails.placeholder);
           const currentCode = languageCodeMap[selectedLanguage];
-          setValue('code', currentCode !== undefined ? currentCode : languageDetails.placeholder);
+          setValue('code', currentCode !== undefined ? currentCode : '');
         }
         setLoading(false);
       } catch (err) {
@@ -168,16 +179,19 @@ const CodeEditorForm = ({ languages, problemId }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
           <label htmlFor="language">Language</label>
-          <select
-            id="language"
-            {...register('language')}
-            className="form-control"
-            defaultValue={selectedLanguage}
-          >
-            {languages.map(lang => (
-              <option key={lang.id} value={lang.css_name}>{lang.name}</option>
-            ))}
-          </select>
+          <div className='language-form'>
+            <select
+              id="language"
+              {...register('language')}
+              className="form-control"
+              defaultValue={selectedLanguage}
+            >
+              {languages.map(lang => (
+                <option key={lang.id} value={lang.css_name}>{lang.name}</option>
+              ))}
+            </select>
+            <button type="button" onClick={handleExampleClick} className="btn btn-primary" disabled={isSubmitDisabled}>Example</button>
+          </div>
         </div>
         <div className="form-group">
           <Controller

@@ -25394,6 +25394,18 @@ dl li {
   color: #fc424a; 
 }
 
+.language-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .btn {
+    margin-left: 15px;
+    margin-bottom: 2px;
+    height: 39px;
+  }
+}
+
 .table {
   padding: 0.7rem !important;
 }
