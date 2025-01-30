@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
-import { useAuth } from '../../hooks/AuthProvider';
 import PageHeader from './PageHeader';
 import ProblemTests from './ProblemTests';
 import TagList from './TagList';
@@ -15,47 +14,42 @@ const Problem = () => {
   const [languages, setLanguages] = useState(null);
   const [loading, setLoading] = useState(true);
   const params = useParams();
-  const { authHeaders } = useAuth();
 
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        const response = await axiosInstance.get(`/api/v1/problems/${params.id}`, {
-          headers: authHeaders(),
-        });
+        const response = await axiosInstance.get(`/api/v1/problems/${params.problem_id}`);
         setTimeout(() => {
           setProblem(response.data.problem);
           if (response.data) {
             setLoading(false);
           }
-        }, 350);
+        }, 100);
       } catch (error) {
         console.error('Error fetching problem:', error);
       }
     };
 
     fetchProblem();
-  }, [authHeaders, params.id]);
+  }, [params.problem_id, params.contest_id]);
 
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
-        const response = await axiosInstance.get(`/api/v1/languages`, {
-          headers: authHeaders(),
-        });
+        const response = await axiosInstance.get(`/api/v1/languages`);
         setTimeout(() => {
           setLanguages(response.data);
           if (response.data) {
             setLoading(false);
           }
-        }, 350);
+        }, 100);
       } catch (error) {
         console.error('Error fetching languages:', error);
       }
     };
 
     fetchLanguages();
-  }, [authHeaders]);
+  }, []);
 
 
   if (loading || !problem) {
@@ -64,7 +58,7 @@ const Problem = () => {
 
   return (
     <>
-      <PageHeader problem={problem} />
+      <PageHeader params={params} />
       <div className="row">
         <div className="col">
           <div className="card">
@@ -90,7 +84,7 @@ const Problem = () => {
                 </div>
               </div>
               <ProblemDescription description={problem.description} />
-              <ProblemTests problemId={problem.id} />
+              <ProblemTests params={params} />
             </div>
           </div>
         </div>
@@ -98,7 +92,7 @@ const Problem = () => {
           {languages && (
             <div className="card">
               <div className="card-body">
-                <CodeEditorForm languages={languages} problemId={problem.id} />
+                <CodeEditorForm languages={languages} params={params} />
               </div>
             </div>
           )}

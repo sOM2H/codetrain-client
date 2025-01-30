@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthProvider';
 import Identicon from 'react-identicons';
 
 function Layout() {
-  const { logOut, currentUser } = useAuth();
+  const { logout, currentUser } = useAuth();
 
   return (
     <>
@@ -27,15 +27,30 @@ function Layout() {
                 </div>
               </div>
             </li>
+            { currentUser.role === "admin" && (
+              <>
+                <li className="nav-item nav-category">
+                  <span className="nav-link">Admin</span>
+                </li>
+                <li className="nav-item menu-items">
+                  <a className="nav-link" href="/organizations">
+                    <span className="menu-icon">
+                      <i className="mdi mdi-domain"></i>
+                    </span>
+                    <span className="menu-title">Organizations</span>
+                  </a>
+                </li>
+              </>
+            )}
             <li className="nav-item nav-category">
               <span className="nav-link">Navigation</span>
             </li>
             <li className="nav-item menu-items">
-              <a className="nav-link" href="/dashboard">
+              <a className="nav-link" href="/contests">
                 <span className="menu-icon">
-                  <i className="mdi mdi-speedometer"></i>
+                  <i className="mdi mdi-code-greater-than-or-equal"></i>
                 </span>
-                <span className="menu-title">Dashboard</span>
+                <span className="menu-title">Contests</span>
               </a>
             </li>
             <li className="nav-item menu-items">
@@ -44,14 +59,6 @@ function Layout() {
                   <i className="mdi mdi-xml"></i>
                 </span>
                 <span className="menu-title">Problems</span>
-              </a>
-            </li>
-            <li className="nav-item menu-items">
-              <a className="nav-link" href="/about">
-                <span className="menu-icon">
-                  <i className="mdi mdi-information-outline"></i>
-                </span>
-                <span className="menu-title">About</span>
               </a>
             </li>
             <li className="nav-item menu-items">
@@ -98,7 +105,7 @@ function Layout() {
                       </div>
                     </a> 
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item preview-item" onClick={() => logOut()}>
+                    <a className="dropdown-item preview-item" onClick={() => logout()}>
                       <div className="preview-thumbnail">
                         <div className="preview-icon bg-dark rounded-circle">
                           <i className="mdi mdi-logout text-danger"></i>

@@ -1,122 +1,67 @@
-import { useContext, createContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosSetup";
 import { jwtDecode } from "jwt-decode";
-import axios from 'axios';
 
 const AuthContext = createContext();
 
-let updateAuthStateGlobal;
-
-const AuthProvider = ({ children }) => {
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken") || "");
-  const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken") || "");
-
-  const getUserFromToken = (token) => {
-    if (!token) return null;
-    try {
-      const decoded = jwtDecode(token);
-      return {
-        id: decoded.id,
-        login: decoded.login,
-        full_name: decoded.full_name,
-        role: decoded.roles[0]?.name,
-        organization: decoded.organization,
-        sub: decoded.sub,
-        scp: decoded.scp,
-        aud: decoded.aud,
-        iat: decoded.iat,
-        exp: decoded.exp,
-        jti: decoded.jti,
-      };
-    } catch (e) {
-      console.error("Invalid token", e);
-      return null;
-    }
-  };
-
-  const [currentUser, setCurrentUser] = useState(accessToken ? getUserFromToken(accessToken) : null);
-
+export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("access_token");
 
-  useEffect(() => {
-    if (accessToken) {
-      const userData = getUserFromToken(accessToken);
-      if (userData) {
-        setCurrentUser(userData);
+  const [currentUser, setCurrentUser] = useState(() => {
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        return decoded.user;
+      } catch (error) {
+        return null;
       }
     }
-  }, [accessToken]);
+    return null;
+  });
 
-  const updateAuthState = (data) => {
-    const { accessToken, refreshToken } = data;
-
-    setAccessToken(accessToken);
-    setRefreshToken(refreshToken);
-
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
-
-    const userData = getUserFromToken(accessToken);
-    setCurrentUser(userData);
-  };
-
-  updateAuthStateGlobal = updateAuthState;
-
-  const authHeaders = () => {
-    return {
-      'Authorization': `Bearer ${accessToken}`,
-    };
-  };
-
-  const loginAction = async (data) => {
+  const login = async (data) => {
+    const response = await axiosInstance.post("/users/sign_in", data);
+    const { access_token, refresh_token } = response.data;
+    localStorage.setItem("access_token", access_token);
+    localStorage.setItem("refresh_token", refresh_token);
     try {
-      const response = await axios.post('http://localhost:3000/users/sign_in', data);
-      updateAuthState({
-        accessToken: response.data.access_token,
-        refreshToken: response.data.refresh_token,
-      });
-      console.log(currentUser)
-      navigate('/dashboard', { replace: true });
+      const decoded = jwtDecode(access_token);
+      setCurrentUser(decoded.user || null);
     } catch (error) {
-      throw new Error(error);
+      setCurrentUser(null);
     }
+    navigate('/dashboard', { replace: true });
   };
 
-  const signupAction = async (data) => {
+  const signup = async (data) => {
+    const response = await axiosInstance.post("/users", data);
+    const { access_token, refresh_token } = response.data;
+    localStorage.setItem("access_token", access_token);
+    localStorage.setItem("refresh_token", refresh_token);
     try {
-      const response = await axios.post('http://localhost:3000/users', data);
-      updateAuthState({
-        accessToken: response.data.access_token,
-        refreshToken: response.data.refresh_token,
-      });
-      navigate('/dashboard', { replace: true });
+      const decoded = jwtDecode(access_token);
+      setCurrentUser(decoded.user || null);
     } catch (error) {
-      throw new Error(error);
+      setCurrentUser(null);
     }
+    navigate('/dashboard', { replace: true });
   };
 
-  const logOut = () => {
-    updateAuthState({
-      accessToken: "",
-      refreshToken: "",
-    });
+  const logout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     setCurrentUser(null);
-    navigate("/login");
+    navigate('/login', { replace: true });
   };
 
   return (
-    <AuthContext.Provider value={{
-      accessToken, refreshToken, authHeaders,
-      currentUser, loginAction, signupAction, logOut
-    }}>
+    <AuthContext.Provider value={{ currentUser, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export { updateAuthStateGlobal };
+export const useAuth = () => useContext(AuthContext);
 export default AuthProvider;
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};

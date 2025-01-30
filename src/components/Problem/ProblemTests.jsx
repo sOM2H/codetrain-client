@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axiosInstance from '../../utils/axiosSetup';
-import { useAuth } from '../../hooks/AuthProvider';
 import Spinner from '../helpers/Spinner';
 
-const ProblemTests = ({ problemId }) => {
+const ProblemTests = ({ params }) => {
   const [tests, setTests] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { authHeaders } = useAuth();
   const rowRefs = useRef([]);
 
   const syncHeights = useCallback(() => {
@@ -31,9 +29,7 @@ const ProblemTests = ({ problemId }) => {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const response = await axiosInstance.get(`/api/v1/problems/${problemId}/tests/first_two`, {
-          headers: authHeaders(),
-        });
+        const response = await axiosInstance.get(`/api/v1/problems/${params.problem_id}/tests/first_two`);
         setTests(response.data.tests);
       } catch (error) {
         console.error('Error fetching tests:', error);
@@ -44,7 +40,7 @@ const ProblemTests = ({ problemId }) => {
     };
 
     fetchTests();
-  }, [authHeaders, problemId]);
+  }, [params.problem_id]);
 
   useEffect(() => {
     syncHeights();

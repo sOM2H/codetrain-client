@@ -11,19 +11,24 @@ function Attempts() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [problem, setProblem] = useState();
   const navigate = useNavigate();
   const params = useParams();
-  const { authHeaders, currentUser } = useAuth();
+  const { currentUser } = useAuth();
+
+  let prefix = ''
+
+  if (params.contest_id) {
+    prefix = `/contests/${params.contest_id}`
+  }
 
   useEffect(() => {
     const fetchAttempts = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`/api/v1/problems/${params.id}/attempts`, {
-          headers: authHeaders(),
+        const response = await axiosInstance.get(`/api/v1/problems/${params.problem_id}/attempts`, {
           params: {
             page: currentPage,
+            contest_id: params.contest_id
           },
         });
         setAttempts(response.data.attempts);
@@ -36,31 +41,11 @@ function Attempts() {
     };
 
     fetchAttempts();
-  }, [params.id, authHeaders, currentPage]);
+  }, [params.problem_id, currentPage, params.contest_id]);
 
 
   useEffect(() => {
-    const fetchProblem = async () => {
-      try {
-        const response = await axiosInstance.get(`/api/v1/problems/${params.id}`, {
-          headers: authHeaders(),
-        });
-        setTimeout(() => {
-          setProblem(response.data.problem);
-          if (response.data) {
-            setLoading(false);
-          }
-        }, 350);
-      } catch (error) {
-        console.error('Error fetching problem:', error);
-      }
-    };
-
-    fetchProblem();
-  }, [authHeaders, params.id]);
-
-  useEffect(() => {
-    const subscription = consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: params.id, user_id: currentUser.id }, {
+    const subscription = consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: params.problem_id, user_id: currentUser.id }, {
       received(data) {
         console.log('Received data:', data);
         setAttempts((prevAttempts) => {
@@ -78,7 +63,7 @@ function Attempts() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [params.id, currentUser.id]);
+  }, [params.problem_id, currentUser.id]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -119,25 +104,47 @@ function Attempts() {
     );
   };
 
-  if (loading || !attempts || !problem) {
+  if (loading || !attempts ) {
     return <Spinner />;
   }
 
   return (
     <div className="row">
       <div className="page-header">
-        <h2 className="page-title"> Attempts for { problem.id} Problem </h2>
+        <h2 className="page-title"> Attempts for { params.problem_id } Problem </h2>
         <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item" onClick={() => navigate("/problems")}>
-              <a className="text-white" href="/problems">Problems</a>
-            </li>
-            <li className="breadcrumb-item" aria-current="page">
-              <a className="text-white" href={"/problems/" + problem.id}>{problem.id}</a>
-            </li>
-            <li className="breadcrumb-item active" aria-current="page">
-              Attempts
-            </li>
+        <ol className="breadcrumb">
+            {params.contest_id ? (
+              <>
+                <li className="breadcrumb-item" onClick={() => navigate(`/contests`)}>
+                  <a className="text-white pointer">Contests</a>
+                </li>
+                <li className="breadcrumb-item" onClick={() => navigate(`/contests/${params.contest_id}`)}>
+                  <a className="text-white pointer">{params.contest_id}</a>
+                </li>
+                <li className="breadcrumb-item" onClick={() => navigate(`/contests/${params.contest_id}/problems`)}>
+                  <a className="text-white pointer">Problems</a>
+                </li>
+                <li className="breadcrumb-item" onClick={() => navigate(`/contests/${params.contest_id}/problems/${params.problem_id}`)}>
+                  <a className="text-white pointer">{params.problem_id}</a>
+                </li>
+                <li className="breadcrumb-item active" aria-current="page">
+                  Attempts
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="breadcrumb-item" onClick={() => navigate("/problems")}>
+                  <a className="text-white pointer">Problems</a>
+                </li>
+                <li className="breadcrumb-item" onClick={() => navigate(`/problems/${params.problem_id}`)}>
+                  <a className="text-white pointer">{params.problem_id}</a>
+                </li>
+                <li className="breadcrumb-item active" aria-current="page">
+                  Attempts
+                </li>
+              </>
+            )}
           </ol>
         </nav>
       </div>
@@ -156,7 +163,7 @@ function Attempts() {
               </thead>
               <tbody>
                 {attempts.map((attempt) => (
-                  <tr key={attempt.id} onClick={() => navigate(`/problems/${problem.id}/attempts/${attempt.id}`)}>
+                  <tr key={attempt.id} onClick={() => navigate(`${prefix}/problems/${params.problem_id}/attempts/${attempt.id}`)}>
                     <td>{attempt.id}</td>
                     <td>{attempt.language.name}</td>
                     <td>

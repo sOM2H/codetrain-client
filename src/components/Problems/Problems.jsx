@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
-import { useAuth } from '../../hooks/AuthProvider';
 import Tag, { TagColors } from '../Tag';
 import Complexity from '../Complexity';
 import Spinner from '../helpers/Spinner';
@@ -17,14 +16,12 @@ function Problems() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
-  const { authHeaders } = useAuth();
 
   useEffect(() => {
     const fetchProblems = async () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get('/api/v1/problems', {
-          headers: authHeaders(),
           params: {
             sort_by: sortBy,
             sort_order: sortOrder,
@@ -38,21 +35,19 @@ function Problems() {
           setCurrentPage(response.data.meta.current_page);
           setTotalPages(response.data.meta.total_pages);
           setLoading(false);
-        }, 350);
+        }, 100 );
       } catch (error) {
         console.error('Error fetching problems:', error);
       }
     };
 
     fetchProblems();
-  }, [sortBy, sortOrder, selectedTags, currentPage, authHeaders]);
+  }, [sortBy, sortOrder, selectedTags, currentPage]);
 
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axiosInstance.get('/api/v1/tags', {
-          headers: authHeaders()
-        });
+        const response = await axiosInstance.get('/api/v1/tags');
         setTags(response.data.tags);
       } catch (error) {
         console.error('Error fetching tags:', error);
@@ -60,7 +55,7 @@ function Problems() {
     };
 
     fetchTags();
-  }, [authHeaders]);
+  }, []);
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);

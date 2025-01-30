@@ -25406,6 +25406,10 @@ dl li {
   }
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .table {
   padding: 0.7rem !important;
 }

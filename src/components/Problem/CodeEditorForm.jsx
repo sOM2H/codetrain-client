@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/AuthProvider';
 import consumer from '../../utils/cable';
 import Score from './Score';
 
-const CodeEditorForm = ({ languages, problemId }) => {
+const CodeEditorForm = ({ languages, params }) => {
   const { register, handleSubmit, control, setValue, watch } = useForm({
     defaultValues: {
       code: '',
@@ -21,9 +21,15 @@ const CodeEditorForm = ({ languages, problemId }) => {
   const [error, setError] = useState(null);
   const [lastAttempt, setLastAttempt] = useState(null);
   const [languageCodeMap, setLanguageCodeMap] = useState({});
-  const { authHeaders, currentUser } = useAuth();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
   const selectedLanguage = watch('language');
+
+  let prefix = ''
+
+  if (params.contest_id) {
+    prefix = `/contests/${params.contest_id}`
+  }
 
   const handleExampleClick = () => {
     const languageDetails = languages.find(lang => lang.css_name === selectedLanguage);
@@ -39,11 +45,11 @@ const CodeEditorForm = ({ languages, problemId }) => {
   useEffect(() => {
     const fetchLastAttempt = async () => {
       try {
-        const response = await axiosInstance.get(`/api/v1/problems/${problemId}/attempts`, {
-          headers: authHeaders(),
+        const response = await axiosInstance.get(`/api/v1/problems/${params.problem_id}/attempts`, {
           params: {
             limit: 1,
             sort: 'desc',
+            contest_id: params.contest_id,
           },
         });
         if (response.data.attempts && response.data.attempts.length > 0) {
@@ -55,16 +61,16 @@ const CodeEditorForm = ({ languages, problemId }) => {
     };
 
     fetchLastAttempt();
-  }, [authHeaders, problemId]);
+  }, [params.problem_id]);
 
   useEffect(() => {
-    consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: problemId, user_id: currentUser.id }, {
+    consumer.subscriptions.create({ channel: 'AttemptsChannel', problem_id: params.problem_id, user_id: currentUser.id }, {
       received(data) {
         console.log('Received data:', data);
         setLastAttempt(data);
       }
     });
-  }, [problemId, currentUser.id]);
+  }, [params.problem_id, currentUser.id]);
 
   useEffect(() => {
     if (languages) {
@@ -112,11 +118,10 @@ const CodeEditorForm = ({ languages, problemId }) => {
       const attemptData = {
         code: data.code,
         language_id: selectedLanguageObj.id,
-        problem_id: problemId
+        problem_id: params.problem_id,
+        contest_id: params.contest_id
       };
-      const response = await axiosInstance.post('/api/v1/attempts', { attempt: attemptData }, {
-        headers: authHeaders()
-      });
+      const response = await axiosInstance.post('/api/v1/attempts', { attempt: attemptData });
       console.log('Attempt created successfully:', response.data);
     } catch (err) {
       console.error('Error creating attempt:', err);
@@ -141,7 +146,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
           <div className="last-attempt">
             <div className='last-attempt-title'>
               <h4 className="">Last Attempt</h4>
-              <Link to={`/problems/${problemId}/attempts`} className="btn btn-primary">
+              <Link to={`${prefix}/problems/${params.problem_id}/attempts`} className="btn btn-primary">
                 View All Attempts
               </Link>
             </div>
@@ -157,7 +162,7 @@ const CodeEditorForm = ({ languages, problemId }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr key={lastAttempt.id} onClick={() => navigate(`/problems/${problemId}/attempts/${lastAttempt.id}`)}>
+                  <tr key={lastAttempt.id} onClick={() => navigate(`${prefix}/problems/${params.problem_id}/attempts/${lastAttempt.id}`)}>
                     <td>{lastAttempt.id}</td>
                     <td>{lastAttempt.language.name}</td>
                     <td>

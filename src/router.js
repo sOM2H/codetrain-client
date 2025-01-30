@@ -11,6 +11,10 @@ import Attempt from './components/Problem/Attempt';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Profile from './components/Profile';
+import Organizations from './components/Organisations';
+import Organization from './components/Organization/Organization';
+import Contests from './components/Conests';
+import Contest from './components/Contest/Contest';
 
 import PrivateRoute from './components/helpers/PrivateRoute';
 import AuthProvider from './hooks/AuthProvider';
@@ -29,9 +33,16 @@ const AppRouter = () => (
             <Route path="about" element={<About />} />
             <Route path="contacts" element={<Contacts />} />
             <Route path="problems" element={<Problems />} />
-            <Route path="problems/:id" element={<Problem />} />
-            <Route path="problems/:id/attempts" element={<Attempts />} />
+            <Route path="problems/:problem_id" element={<Problem />} />
+            <Route path="problems/:problem_id/attempts" element={<Attempts />} />
             <Route path="problems/:problem_id/attempts/:attempt_id" element={<Attempt />} />
+            <Route path="organizations" element={<Organizations />} />
+            <Route path="organizations/:organization_id" element={<Organization />} />
+            <Route path="contests" element={<Contests />} />
+            <Route path="contests/:contest_id" element={<Contest />} />
+            <Route path="contests/:contest_id/problems/:problem_id" element={<Problem />} />
+            <Route path="contests/:contest_id/problems/:problem_id/attempts" element={<Attempts />} />
+            <Route path="contests/:contest_id/problems/:problem_id/attempts/:attempt_id" element={<Attempt />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" />} />

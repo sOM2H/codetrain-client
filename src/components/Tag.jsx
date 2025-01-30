@@ -11,15 +11,15 @@ export const TagColors = {
   7: "mint1",
 };
 
-function Tag(props) {
-  const colorClass = TagColors[props.id % 8] || "primary";
+function Tag({ id = 0, name = "Default Tag" }) {
+  const colorClass = TagColors[id % 8] || "primary";
 
   return (
     <div 
-      key={props.id} 
+      key={id} 
       className={"problem-tag badge badge-pill badge-outline-" + colorClass}
     >
-      {props.name}
+      {name}
     </div>
   );
 };

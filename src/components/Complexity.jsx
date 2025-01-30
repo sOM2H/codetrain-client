@@ -1,7 +1,7 @@
 import React from "react";
 
-function Complexity(props) {
-  const stars = parseInt(props.complexity) || 1;
+function Complexity({complexity = 1}) {
+  const stars = parseInt(complexity) || 1;
 
   return (
     <div className="complexity">
