@@ -27,7 +27,7 @@ function Layout() {
                 </div>
               </div>
             </li>
-            { currentUser.role === "admin" && (
+            { currentUser.roles[0].name === "admin" && (
               <>
                 <li className="nav-item nav-category">
                   <span className="nav-link">Admin</span>

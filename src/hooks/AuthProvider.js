@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(null);
     }
     navigate('/dashboard', { replace: true });
+    window.location.reload()
   };
 
   const signup = async (data) => {
@@ -47,6 +48,7 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(null);
     }
     navigate('/dashboard', { replace: true });
+    window.location.reload()
   };
 
   const logout = () => {
