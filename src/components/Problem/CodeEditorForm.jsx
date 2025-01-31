@@ -21,15 +21,35 @@ const CodeEditorForm = ({ languages, params }) => {
   const [error, setError] = useState(null);
   const [lastAttempt, setLastAttempt] = useState(null);
   const [languageCodeMap, setLanguageCodeMap] = useState({});
+  const [contest, setContest] = useState(null);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const selectedLanguage = watch('language');
 
-  let prefix = ''
+  let prefix = '';
 
   if (params.contest_id) {
-    prefix = `/contests/${params.contest_id}`
+    prefix = `/contests/${params.contest_id}`;
   }
+
+  useEffect(() => {
+    const fetchContestData = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/v1/contests/${params.contest_id}`);
+        setContest(response.data.contest);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching contest data:', error);
+        setLoading(false);
+      }
+    };
+
+    if (params.contest_id) {
+      fetchContestData();
+    }
+  }, [params.contest_id]);
+
+  const isContestActive = contest && new Date() >= new Date(contest.start_time) && new Date() <= new Date(contest.end_time);
 
   const handleExampleClick = () => {
     const languageDetails = languages.find(lang => lang.css_name === selectedLanguage);
@@ -138,94 +158,102 @@ const CodeEditorForm = ({ languages, params }) => {
   }
 
   const isSubmitDisabled = lastAttempt && (lastAttempt.result === "Pending" || lastAttempt.result === "Running");
+  const isCodeEmpty = !watch('code').trim();
 
   return (
     <>
       {lastAttempt && (
-        <>
-          <div className="last-attempt">
-            <div className='last-attempt-title'>
-              <h4 className="">Last Attempt</h4>
-              <Link to={`${prefix}/problems/${params.problem_id}/attempts`} className="btn btn-primary">
-                View All Attempts
-              </Link>
-            </div>
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Language</th>
-                    <th>Result</th>
-                    <th>Test</th>
-                    <th>Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr key={lastAttempt.id} onClick={() => navigate(`${prefix}/problems/${params.problem_id}/attempts/${lastAttempt.id}`)}>
-                    <td>{lastAttempt.id}</td>
-                    <td>{lastAttempt.language.name}</td>
-                    <td>
-                      <div className={"problem-tag badge badge-pill badge-outline-"+ (
-                        lastAttempt.result === "Passed" ? "success" : (lastAttempt.result === "Running" ? "warning" : "danger")
-                        )}>
-                        {lastAttempt.result}
-                      </div>
-                    </td>
-                    <td>{(lastAttempt.log && lastAttempt.result !== "Passed") && lastAttempt.log}</td>
-                    <td><Score value={lastAttempt.rounded_score} /></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <div className="last-attempt">
+          <div className='last-attempt-title'>
+            <h4 className="">Last Attempt</h4>
+            <Link to={`${prefix}/problems/${params.problem_id}/attempts`} className="btn btn-primary">
+              View All Attempts
+            </Link>
           </div>
-        </>
+          <div className="table-responsive">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Language</th>
+                  <th>Result</th>
+                  <th>Test</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr key={lastAttempt.id} onClick={() => navigate(`${prefix}/problems/${params.problem_id}/attempts/${lastAttempt.id}`)}>
+                  <td>{lastAttempt.id}</td>
+                  <td>{lastAttempt.language.name}</td>
+                  <td>
+                    <div className={"problem-tag badge badge-pill badge-outline-"+ (
+                      lastAttempt.result === "Passed" ? "success" : (lastAttempt.result === "Running" ? "warning" : "danger")
+                      )}>
+                      {lastAttempt.result}
+                    </div>
+                  </td>
+                  <td>{(lastAttempt.log && lastAttempt.result !== "Passed") && lastAttempt.log}</td>
+                  <td><Score value={lastAttempt.rounded_score} /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       )}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
-          <label htmlFor="language">Language</label>
-          <div className='language-form'>
-            <select
-              id="language"
-              {...register('language')}
-              className="form-control"
-              defaultValue={selectedLanguage}
-            >
-              {languages.map(lang => (
-                <option key={lang.id} value={lang.css_name}>{lang.name}</option>
-              ))}
-            </select>
-            <button type="button" onClick={handleExampleClick} className="btn btn-primary" disabled={isSubmitDisabled}>Example</button>
+      
+      {isContestActive && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-group">
+            <label htmlFor="language">Language</label>
+            <div className='language-form'>
+              <select
+                id="language"
+                {...register('language')}
+                className="form-control"
+                defaultValue={selectedLanguage}
+              >
+                {languages.map(lang => (
+                  <option key={lang.id} value={lang.css_name}>{lang.name}</option>
+                ))}
+              </select>
+              <button type="button" onClick={handleExampleClick} className="btn btn-primary" disabled={isSubmitDisabled}>Example</button>
+            </div>
           </div>
+          <div className="form-group">
+            <Controller
+              name="code"
+              control={control}
+              render={({ field }) => (
+                <CodeEditor
+                  {...field}
+                  value={field.value}
+                  language={editorLanguage}
+                  placeholder={editorPlaceholder}
+                  padding={15}
+                  onChange={(evn) => handleCodeChange(evn.target.value)}
+                  style={{
+                    minHeight: '300px',
+                    backgroundColor: 'rgb(13, 17, 22)',
+                    fontFamily: 'ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace',
+                    fontSize: '14px'
+                  }}
+                  className="textarea-code-editor"
+                  data-gramm="false"
+                  data-gramm_editor="false"
+                  data-enable-grammarly="false"
+                />
+              )}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary" disabled={isSubmitDisabled || isCodeEmpty}>Submit</button>
+        </form>
+      )}
+      
+      {!isContestActive && (
+        <div className="alert alert-info">
+          This contest is not active. You cannot submit any attempts.
         </div>
-        <div className="form-group">
-          <Controller
-            name="code"
-            control={control}
-            render={({ field }) => (
-              <CodeEditor
-                {...field}
-                value={field.value}
-                language={editorLanguage}
-                placeholder={editorPlaceholder}
-                padding={15}
-                onChange={(evn) => handleCodeChange(evn.target.value)}
-                style={{
-                  minHeight: '300px',
-                  backgroundColor: 'rgb(13, 17, 22)',
-                  fontFamily: 'ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace',
-                  fontSize: '14px'
-                }}
-                className="textarea-code-editor"
-                data-gramm="false"
-                data-gramm_editor="false"
-                data-enable-grammarly="false"
-              />
-            )}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary" disabled={isSubmitDisabled}>Submit</button>
-      </form>
+      )}
     </>
   );
 };

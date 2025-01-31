@@ -15,7 +15,8 @@ import Organizations from './components/Organisations';
 import Organization from './components/Organization/Organization';
 import Contests from './components/Conests';
 import Contest from './components/Contest/Contest';
-import ContestResults from './components/Contest/СontestResults';
+import ContestResults from './components/Contest/ContestResults';
+import ContestsPrivateRoute from './components/helpers/ContestPrivateRoute';
 
 import PrivateRoute from './components/helpers/PrivateRoute';
 import AuthProvider from './hooks/AuthProvider';
@@ -41,10 +42,12 @@ const AppRouter = () => (
             <Route path="organizations/:organization_id" element={<Organization />} />
             <Route path="contests" element={<Contests />} />
             <Route path="contests/:contest_id" element={<Contest />} />
-            <Route path="contests/:contest_id/results" element={<ContestResults />} />
-            <Route path="contests/:contest_id/problems/:problem_id" element={<Problem />} />
-            <Route path="contests/:contest_id/problems/:problem_id/attempts" element={<Attempts />} />
-            <Route path="contests/:contest_id/problems/:problem_id/attempts/:attempt_id" element={<Attempt />} />
+            <Route element={<ContestsPrivateRoute />}>
+              <Route path="contests/:contest_id/results" element={<ContestResults />} />
+              <Route path="contests/:contest_id/problems/:problem_id" element={<Problem />} />
+              <Route path="contests/:contest_id/problems/:problem_id/attempts" element={<Attempts />} />
+              <Route path="contests/:contest_id/problems/:problem_id/attempts/:attempt_id" element={<Attempt />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" />} />

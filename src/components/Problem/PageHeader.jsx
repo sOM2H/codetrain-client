@@ -13,13 +13,13 @@ const PageHeader = ({ params }) => {
             (
               <>
                 <li className="breadcrumb-item" onClick={() => navigate(`/contests`)}>
-                  <a className="text-white" href="/contests" >Contests</a>
+                  <a className="text-white">Contests</a>
                 </li>
                 <li className="breadcrumb-item" onClick={() => navigate(`/contests/${params.contest_id}`)}>
-                  <a className="text-white" href={`/contests/${params.contest_id}`} >{params.contest_id}</a>
+                  <a className="text-white">{params.contest_id}</a>
                 </li>
                 <li className="breadcrumb-item" onClick={() => navigate(`/contests/${params.contest_id}`)}>
-                  <a className="text-white" href={`/contests/${params.contest_id}`}>Problems</a>
+                  <a className="text-white">Problems</a>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   {params.problem_id}
@@ -28,7 +28,7 @@ const PageHeader = ({ params }) => {
             ) : (
               <>
                 <li className="breadcrumb-item" onClick={() => navigate("/problems")}>
-                  <a className="text-white" href="/problems">Problems</a>
+                  <a className="text-white">Problems</a>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   {params.problem_id}

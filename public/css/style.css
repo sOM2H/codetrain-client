@@ -25200,7 +25200,8 @@ dl li {
 .req-row {
   align-items: center;
   display: flex;
-  float: right;
+  justify-content: center;
+  width: 240px ;
   gap: 15px;
 }
 
@@ -25253,6 +25254,14 @@ dl li {
   border-radius: 2px;
   color: #ffffff;
   height: 100%;
+}
+
+.contest-description {
+  margin-bottom: 20px;
+}
+
+.contest-description-title {
+  margin-bottom: 20px;
 }
 
 .problem-description {
@@ -25377,8 +25386,8 @@ dl li {
   border-color: #33ff9f !important;
 }
 
-.score-green-dark { color: #008f39; font-weight: bold; } /* 100% */
-.score-green { color: #00d25b; } /* 90-99% */
+.score-green { color: #00d25b; font-weight: bold;} /* 100% */
+.score-green-dark { color: #008f39; } /* 90-99% */
 .score-lime { color: #8bc34a; } /* 80-89% */
 .score-yellow-green { color: #cddc39; } /* 70-79% */
 .score-yellow { color: #ffeb3b; } /* 60-69% */
@@ -25430,7 +25439,7 @@ dl li {
   margin-top: 15px;
 
   .btn {
-    width: 140px;
+    width: 100%;
   }
 }
 

@@ -13,9 +13,9 @@ function Score({ value, maxValue = 100 }) {
 
   let colorClass = "";
   if (normalizedValue === 100) {
-    colorClass = "score-green-dark";
-  } else if (normalizedValue >= 90) {
     colorClass = "score-green";
+  } else if (normalizedValue >= 90) {
+    colorClass = "score-green-dark";
   } else if (normalizedValue >= 80) {
     colorClass = "score-lime";
   } else if (normalizedValue >= 70) {
