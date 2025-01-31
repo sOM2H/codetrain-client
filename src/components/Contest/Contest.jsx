@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
 import Tag from '../Tag';
+import TagList from '../Problem/TagList';
+import ProblemChar from './ProblemChar';
 import Complexity from '../Complexity';
 import Spinner from '../helpers/Spinner';
 import Score from '../Problem/Score';
@@ -38,14 +40,34 @@ function Contest() {
       <div className="col-sm-12">
         <div className="card">
           <div className="card-body">
-            <h4 className="card-title">{loading ? 'Loading contest...' : contest?.title}</h4>
             {loading ? (
               <Spinner />
             ) : (
               <div>
-                <h5>Description:</h5>
-                <p>{contest?.description}</p>
-                <h5>Problems:</h5>
+                <div className="problem-title">
+                  <div>
+                    <h1>{contest.title}</h1>
+                    <div className="title-com">
+                      <small className="text-muted complexity-title">Average Complexity: </small>
+                      <Complexity complexity={contest.average_complexity} />
+                    </div>
+                    <TagList tags={contest.tags} />
+                  </div>
+                  <div className="title-req">
+                    <div className="req-row">
+                      <i className="mdi mdi-timer req-icon"></i>
+                      <h4 className="req-text">Time left: 30:23</h4>
+                    </div>
+                    <div className="req-row-flex">
+                        <button className="btn btn-primary" onClick={() => navigate(`/contests/${contest.id}/results`)}>
+                          Results
+                        </button> 
+                    </div>
+                  </div>
+                </div> 
+                <div className='problem-description'>
+                  <p className='problem-description-text'>{contest.description}</p>
+                </div>
                 {problems.length === 0 ? (
                   <div>No problems found for this contest.</div>
                 ) : (
@@ -61,9 +83,9 @@ function Contest() {
                         </tr>
                       </thead>
                       <tbody>
-                        {problems.map((problem) => (
+                        {problems.map((problem, index) => (
                           <tr key={problem.id} onClick={() => navigate(`/contests/${contest.id}/problems/${problem.id}`)}>
-                            <td>{problem.id}</td>
+                            <td><ProblemChar index={index} /></td>
                             <td>{problem.title}</td>
                             <td>
                               {problem.tags.map((tag) => (

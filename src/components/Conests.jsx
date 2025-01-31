@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosSetup";
 import Spinner from "./helpers/Spinner";
+import Complexity from './Complexity';
 
 function Contests() {
   const [contests, setContests] = useState([]);
@@ -40,6 +41,7 @@ function Contests() {
                   <tr>
                     <th>ID</th>
                     <th>Title</th>
+                    <th>Average Complexity</th>
                     <th>Start Time</th>
                     <th>End Time</th>
                   </tr>
@@ -49,6 +51,7 @@ function Contests() {
                     <tr key={contest.id} onClick={() => navigate(`/contests/${contest.id}`)}>
                       <td>{contest.id}</td>
                       <td>{contest.title}</td>
+                      <td><Complexity complexity={contest.average_complexity} /></td>
                       <td>{contest.start_time || "UNLIMITED"}</td>
                       <td>{contest.end_time || "UNLIMITED"}</td>
                     </tr>

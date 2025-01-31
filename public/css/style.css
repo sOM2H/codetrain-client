@@ -25377,21 +25377,20 @@ dl li {
   border-color: #33ff9f !important;
 }
 
-.score-green {
-  color: #00d25b;
-  font-weight: bold;
-}
+.score-green-dark { color: #008f39; font-weight: bold; } /* 100% */
+.score-green { color: #00d25b; } /* 90-99% */
+.score-lime { color: #8bc34a; } /* 80-89% */
+.score-yellow-green { color: #cddc39; } /* 70-79% */
+.score-yellow { color: #ffeb3b; } /* 60-69% */
+.score-amber { color: #ffab00; } /* 50-59% */
+.score-orange { color: #ff9800; } /* 40-49% */
+.score-deep-orange { color: #ff5722; } /* 30-39% */
+.score-red { color: #fc424a; } /* 20-29% */
+.score-dark-red { color: #d32f2f; } /* 10-19% */
+.score-maroon { color: #b71c1c; } /* 0-9% */
 
-.score-yellow {
-  color: #ffab00;
-}
-
-.score-orange {
-  color: #ff5733;
-}
-
-.score-red {
-  color: #fc424a; 
+.score-other {
+  color: #808080;
 }
 
 .language-form {
@@ -25410,8 +25409,56 @@ dl li {
   cursor: pointer;
 }
 
+.pointer-hower {
+  cursor: pointer;
+}
+
+.pointer-hover:hover {
+  font-weight: bold;
+  color: #ffffff !important;
+
+  span {
+    font-weight: bold;
+    color: #ffffff !important;
+  }
+}
+
+.req-row-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+
+  .btn {
+    width: 140px;
+  }
+}
+
+.place-gold {
+  font-weight: bold;
+  color: #FFD700;
+}
+
+.place-silver {
+  font-weight: bold;
+  color: #C0C0C0
+}
+
+.place-bronze {
+  font-weight: bold;
+  color: #CD7f32;
+}
+
+.place-other {
+  color: #808080;
+}
+
 .table {
   padding: 0.7rem !important;
+}
+
+.th-h {
+  background: #2231459c;
 }
 
 body {
