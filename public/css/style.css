@@ -25183,6 +25183,8 @@ dl li {
   display: flex;
   justify-content: left;
   align-items: center;
+  flex-wrap: wrap;
+  max-width: 470px;
 }
 
 .title-req {

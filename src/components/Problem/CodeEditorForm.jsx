@@ -200,8 +200,7 @@ const CodeEditorForm = ({ languages, params }) => {
           </div>
         </div>
       )}
-      
-      {isContestActive && (
+      {(!contest || (contest && isContestActive)) && (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
             <label htmlFor="language">Language</label>
@@ -216,7 +215,7 @@ const CodeEditorForm = ({ languages, params }) => {
                   <option key={lang.id} value={lang.css_name}>{lang.name}</option>
                 ))}
               </select>
-              <button type="button" onClick={handleExampleClick} className="btn btn-primary" disabled={isSubmitDisabled}>Example</button>
+              <button type="button" onClick={handleExampleClick} className="btn btn-primary" disabled={isSubmitDisabled || languageCodeMap[selectedLanguage]}>Example</button>
             </div>
           </div>
           <div className="form-group">
@@ -249,7 +248,7 @@ const CodeEditorForm = ({ languages, params }) => {
         </form>
       )}
       
-      {!isContestActive && (
+      {contest && !isContestActive && (
         <div className="alert alert-info">
           This contest is not active. You cannot submit any attempts.
         </div>

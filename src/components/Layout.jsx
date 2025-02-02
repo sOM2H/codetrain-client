@@ -1,18 +1,24 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthProvider';
 import Identicon from 'react-identicons';
 
 function Layout() {
   const { logout, currentUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isActive = (path) => {
+    return location?.pathname?.startsWith(path) ? 'active' : '';
+  };
 
   return (
     <>
       <div className="container-scroller">
         <nav className="sidebar sidebar-offcanvas" id="sidebar">
           <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-            <a className="sidebar-brand brand-logo brand-logo-text" href="/dashboard">Codetrain</a>
-            <a className="sidebar-brand brand-logo-mini brand-logo-text" href="/dashboard">Ct</a>
+            <a className="sidebar-brand brand-logo brand-logo-text" onClick={() => navigate('/dashboard')}>Codetrain</a>
+            <a className="sidebar-brand brand-logo-mini brand-logo-text" onClick={() => navigate('/dashboard')}>Ct</a>
           </div>
           <ul className="nav">
             <li className="nav-item profile">
@@ -32,8 +38,8 @@ function Layout() {
                 <li className="nav-item nav-category">
                   <span className="nav-link">Admin</span>
                 </li>
-                <li className="nav-item menu-items">
-                  <a className="nav-link" href="/organizations">
+                <li className={`nav-item menu-items ${isActive('/organizations')}`}>
+                  <a className="nav-link" onClick={() => navigate('/organizations')}>
                     <span className="menu-icon">
                       <i className="mdi mdi-domain"></i>
                     </span>
@@ -45,24 +51,24 @@ function Layout() {
             <li className="nav-item nav-category">
               <span className="nav-link">Navigation</span>
             </li>
-            <li className="nav-item menu-items">
-              <a className="nav-link" href="/contests">
+            <li className={`nav-item menu-items ${isActive('/contests')}`}>
+              <a className="nav-link" onClick={() => navigate('/contests')}>
                 <span className="menu-icon">
                   <i className="mdi mdi-code-greater-than-or-equal"></i>
                 </span>
                 <span className="menu-title">Contests</span>
               </a>
             </li>
-            <li className="nav-item menu-items">
-              <a className="nav-link" href="/problems">
+            <li className={`nav-item menu-items ${isActive('/problems')}`}>
+              <a className="nav-link" onClick={() => navigate('/problems')}>
                 <span className="menu-icon">
                   <i className="mdi mdi-xml"></i>
                 </span>
                 <span className="menu-title">Problems</span>
               </a>
             </li>
-            <li className="nav-item menu-items">
-              <a className="nav-link" href="/contacts">
+            <li className={`nav-item menu-items ${isActive('/contacts')}`}>
+              <a className="nav-link" onClick={() => navigate('/contacts')}>
                 <span className="menu-icon">
                   <i className="mdi mdi-contacts-outline"></i>
                 </span>
@@ -74,7 +80,7 @@ function Layout() {
         <div className="container-fluid page-body-wrapper">
           <nav className="navbar p-0 fixed-top d-flex flex-row">
             <div className="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-              <a className="sidebar-brand brand-logo-mini brand-logo-text" href="/dashboard">Ct</a>
+              <a className="sidebar-brand brand-logo-mini brand-logo-text" onClick={() => navigate('/dashboard')}>Ct</a>
             </div>
             <div className="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
               <button className="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -86,7 +92,7 @@ function Layout() {
               </ul>
               <ul className="navbar-nav navbar-nav-right">
                 <li className="nav-item dropdown">
-                  <a className="nav-link" id="profileDropdown" href="/profile" data-bs-toggle="dropdown">
+                  <a className="nav-link" id="profileDropdown" onClick={() => navigate('/profile')} data-bs-toggle="dropdown">
                     <div className="navbar-profile">
                       <Identicon string={currentUser?.full_name} size="30"/>
                       <p className="mb-0 d-none d-sm-block navbar-profile-name">{currentUser?.full_name}</p>
@@ -94,7 +100,7 @@ function Layout() {
                     </div>
                   </a>
                   <div className="dropdown-menu dropdown-menu-end navbar-dropdown preview-list" aria-labelledby="profileDropdown">
-                    <a className="dropdown-item preview-item" href="/profile">
+                    <a className="dropdown-item preview-item" onClick={() => navigate('/profile')}>
                       <div className="preview-thumbnail">
                         <div className="preview-icon bg-dark rounded-circle">
                           <i className="mdi mdi-alien text-success"></i>
