@@ -23,39 +23,41 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (data) => {
     const response = await axiosInstance.post("/users/sign_in", data);
-    const { access_token, refresh_token } = response.data;
+    const { access_token } = response.data;
+
     localStorage.setItem("access_token", access_token);
-    localStorage.setItem("refresh_token", refresh_token);
+
     try {
       const decoded = jwtDecode(access_token);
       setCurrentUser(decoded.user || null);
     } catch (error) {
       setCurrentUser(null);
     }
-    navigate('/dashboard', { replace: true });
-    window.location.reload()
+
+    navigate("/dashboard", { replace: true });
   };
 
   const signup = async (data) => {
     const response = await axiosInstance.post("/users", data);
-    const { access_token, refresh_token } = response.data;
+    const { access_token } = response.data;
+
     localStorage.setItem("access_token", access_token);
-    localStorage.setItem("refresh_token", refresh_token);
+
     try {
       const decoded = jwtDecode(access_token);
       setCurrentUser(decoded.user || null);
     } catch (error) {
       setCurrentUser(null);
     }
-    navigate('/dashboard', { replace: true });
-    window.location.reload()
+
+    navigate("/dashboard", { replace: true });
   };
 
   const logout = () => {
     localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+
     setCurrentUser(null);
-    navigate('/login', { replace: true });
+    navigate("/login", { replace: true });
   };
 
   return (

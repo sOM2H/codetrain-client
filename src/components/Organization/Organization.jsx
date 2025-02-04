@@ -79,12 +79,20 @@ function Organization() {
         <h5>Students</h5>
         <table className="table table-hover">
           <thead>
-            <tr><th>ID</th><th>Name</th></tr>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Login</th>
+            </tr>
           </thead>
           <tbody>
             {students.length ? (
               students.map((student) => (
-                <tr key={student.id}><td>{student.id}</td><td>{student.full_name}</td></tr>
+                <tr key={student.id}>
+                  <td>{student.id}</td>
+                  <td>{student.full_name}</td>
+                  <td>{student.login}</td>
+                </tr>
               ))
             ) : (
               <tr><td colSpan="2">No students found.</td></tr>

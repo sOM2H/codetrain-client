@@ -3,11 +3,13 @@ import axios from "axios";
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3000",
   headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
 
 const systemAxios = axios.create({
   baseURL: "http://localhost:3000",
   headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
 
 const isTokenExpired = (token) => {
@@ -21,16 +23,11 @@ const isTokenExpired = (token) => {
 };
 
 const refreshToken = async () => {
-  console.log("refresh");
-  const refresh_token = localStorage.getItem("refresh_token");
-  if (!refresh_token) return null;
 
   try {
-    const response = await systemAxios.post("/users/refresh_token", { refresh_token });
+    const response = await systemAxios.post("/users/refresh_token");
     const newAccessToken = response.data.access_token;
-    const newRefreshToken = response.data.refresh_token
-    localStorage.setItem("access_token", newAccessToken);
-    localStorage.setItem("refresh_token", newRefreshToken);
+
     return newAccessToken;
   } catch (error) {
     return null;
@@ -47,6 +44,7 @@ axiosInstance.interceptors.request.use(
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      localStorage.setItem("access_token", token);
     }
 
     return config;
@@ -68,8 +66,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } else {
         localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        window.location.href = "/login";
+        // window.location.href = "/login";
       }
     }
 
