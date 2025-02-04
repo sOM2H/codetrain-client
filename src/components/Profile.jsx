@@ -1,8 +1,9 @@
 import React from "react";
-import { useAuth } from '../hooks/AuthProvider';
+import { useOutletContext } from "react-router-dom";
+
 
 const Profile = () => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useOutletContext();
 
   return (
     <div className="container">

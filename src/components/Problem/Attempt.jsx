@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useOutletContext } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
-import { useAuth } from '../../hooks/AuthProvider';
 import Spinner from '../helpers/Spinner';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import Score from './Score';
@@ -13,8 +12,7 @@ function Attempt() {
   const [error, setError] = useState(null);
   const { contest_id, problem_id, attempt_id } = useParams();
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
-
+  const { currentUser } = useOutletContext();
 
   useEffect(() => {
     const fetchAttempt = async () => {

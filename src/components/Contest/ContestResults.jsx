@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '../../hooks/AuthProvider';
+import { useNavigate, useParams, useOutletContext} from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
 import Spinner from '../helpers/Spinner';
 import Score from '../Problem/Score';
@@ -9,7 +8,7 @@ import ProblemChar from './ProblemChar';
 
 const ContestResults = () => {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser } = useOutletContext();
   const { contest_id } = useParams();
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);

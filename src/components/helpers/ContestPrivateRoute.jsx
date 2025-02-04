@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, Outlet, useParams } from "react-router-dom";
+import { Navigate, Outlet, useParams, useOutletContext} from "react-router-dom";
 import axiosInstance from "../../utils/axiosSetup";
 
 const ContestsPrivateRoute = () => {
+  const { currentUser } = useOutletContext();
   const [loading, setLoading] = useState(true);
   const [contest, setContest] = useState();
   const { contest_id } = useParams();
@@ -33,7 +34,7 @@ const ContestsPrivateRoute = () => {
     return <Navigate to="/contests" replace />;
   }
 
-  return <Outlet />;
+  return <Outlet context={{ currentUser }} />;
 };
 
 export default ContestsPrivateRoute;

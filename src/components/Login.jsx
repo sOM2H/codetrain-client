@@ -6,11 +6,7 @@ import { Navigate } from 'react-router-dom';
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
-  const { currentUser, login } = useAuth();
-
-  if (currentUser) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  const { login } = useAuth();
 
   const onSubmit = async (data) => {
     setErrorMessage(null);

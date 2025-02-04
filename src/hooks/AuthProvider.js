@@ -1,67 +1,66 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosSetup";
-import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("access_token");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [currentUser, setCurrentUser] = useState(() => {
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        return decoded.user;
-      } catch (error) {
-        return null;
-      }
-    }
-    return null;
-  });
+  useEffect(() => {
+    axiosInstance
+      .get("/users/me")
+      .then((response) => {
+        setCurrentUser(response.data.user);
+      })
+      .catch((error) => {
+        console.error("Error fetching current user:", error);
+        setCurrentUser(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const login = async (data) => {
-    const response = await axiosInstance.post("/users/sign_in", data);
-    const { access_token } = response.data;
-
-    localStorage.setItem("access_token", access_token);
-
     try {
-      const decoded = jwtDecode(access_token);
-      setCurrentUser(decoded.user || null);
+      const response = await axiosInstance.post("/users/sign_in", data);
+      const user = response.data.user;
+      setCurrentUser(user);
+      navigate("/dashboard", { replace: true });
     } catch (error) {
-      setCurrentUser(null);
+      console.error("Error during login:", error);
     }
-
-    navigate("/dashboard", { replace: true });
   };
 
   const signup = async (data) => {
-    const response = await axiosInstance.post("/users", data);
-    const { access_token } = response.data;
-
-    localStorage.setItem("access_token", access_token);
-
     try {
-      const decoded = jwtDecode(access_token);
-      setCurrentUser(decoded.user || null);
+      const response = await axiosInstance.post("/users", data);
+      const user = response.data.user;
+      setCurrentUser(user);
+      navigate("/dashboard", { replace: true });
     } catch (error) {
-      setCurrentUser(null);
+      console.error("Error during signup:", error);
     }
-
-    navigate("/dashboard", { replace: true });
   };
 
-  const logout = () => {
-    localStorage.removeItem("access_token");
-
-    setCurrentUser(null);
-    navigate("/login", { replace: true });
+  const logout = async () => {
+    try {
+      await axiosInstance.delete("/users/sign_out", {
+        withCredentials: true,
+      });
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      setCurrentUser(null);
+      navigate("/login", { replace: true });
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, signup, logout }}>
+    <AuthContext.Provider value={{ currentUser, login, signup, logout, loading, blabla }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useOutletContext} from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
-import { useAuth } from '../../hooks/AuthProvider';
 import Spinner from '../helpers/Spinner';
 import consumer from '../../utils/cable';
 import Score from './Score';
@@ -13,7 +12,7 @@ function Attempts() {
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
   const params = useParams();
-  const { currentUser } = useAuth();
+  const { currentUser } = useOutletContext();
 
   let prefix = ''
 

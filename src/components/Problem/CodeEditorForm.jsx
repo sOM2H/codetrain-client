@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import Spinner from '../helpers/Spinner';
 import axiosInstance from '../../utils/axiosSetup';
-import { useAuth } from '../../hooks/AuthProvider';
 import consumer from '../../utils/cable';
 import Score from './Score';
 
@@ -22,7 +21,7 @@ const CodeEditorForm = ({ languages, params }) => {
   const [lastAttempt, setLastAttempt] = useState(null);
   const [languageCodeMap, setLanguageCodeMap] = useState({});
   const [contest, setContest] = useState(null);
-  const { currentUser } = useAuth();
+  const { currentUser } = useOutletContext();
   const navigate = useNavigate();
   const selectedLanguage = watch('language');
 

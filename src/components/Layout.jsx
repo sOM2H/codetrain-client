@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthProvider';
 import Identicon from 'react-identicons';
 
 function Layout() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
-  const { logout, currentUser } = useAuth();
+  const { currentUser } = useOutletContext();
+  const { logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -136,7 +137,7 @@ function Layout() {
           </nav>
           <div className="main-panel blank-page">
             <div className="content-wrapper">
-               <Outlet />
+               <Outlet context={{ currentUser }} />
             </div>
           </div>
         </div>
