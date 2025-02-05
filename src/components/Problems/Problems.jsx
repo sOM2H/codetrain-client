@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
 import Tag, { TagColors } from '../Tag';
 import Complexity from '../Complexity';
@@ -7,6 +7,7 @@ import Spinner from '../helpers/Spinner';
 import Score from '../Problem/Score';
 
 function Problems() {
+  const { currentUser } = useOutletContext();
   const [problems, setProblems] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -119,7 +120,16 @@ function Problems() {
       <div className="col-sm-9">
         <div className="card">
           <div className="card-body">
-            <h4 className="card-title">Problems</h4>
+            <div className="card-title">
+              <h4>Problems</h4>
+              {
+                currentUser.role == "admin" && (
+                  <button className="btn btn-primary" onClick={() => navigate(`/problems/new`)}>
+                    New
+                  </button>
+                )
+              }
+            </div>
 
             {loading ? (
               <Spinner />

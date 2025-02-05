@@ -39,7 +39,7 @@ function Layout() {
                 </div>
               </div>
             </li>
-            {currentUser.roles[0].name === "admin" && (
+            {currentUser.role === "admin" && (
               <>
                 <li className="nav-item nav-category">
                   <span className="nav-link">Admin</span>
@@ -98,7 +98,7 @@ function Layout() {
               </ul>
               <ul className="navbar-nav navbar-nav-right">
                 <li className="nav-item dropdown">
-                  <a className="nav-link" id="profileDropdown" onClick={() => { toggleSidebar(); navigate('/profile'); }} data-bs-toggle="dropdown">
+                  <a className="nav-link" id="profileDropdown" data-bs-toggle="dropdown">
                     <div className="navbar-profile">
                       <Identicon string={currentUser?.full_name} size="30"/>
                       <p className="mb-0 d-none d-sm-block navbar-profile-name">{currentUser?.full_name}</p>

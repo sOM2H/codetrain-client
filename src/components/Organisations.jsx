@@ -27,7 +27,12 @@ function Organizations() {
   return (
     <div className="card">
       <div className="card-body">
-        <h4 className="card-title">Organizations</h4>
+        <div className="card-title">
+          <h4>Organizations</h4>
+          <button className="btn btn-primary" onClick={() => navigate(`/organizations/new`)}>
+            New
+          </button>
+        </div>
         {loading ? (
           <Spinner />
         ) : (

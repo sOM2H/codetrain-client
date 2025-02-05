@@ -1,12 +1,22 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 const PageHeader = ({ params }) => {
   const navigate = useNavigate();
+  const { currentUser } = useOutletContext();
 
   return (
     <div className="page-header">
-      <h2 className="page-title"> Problem #{params.problem_id} </h2>
+      <div className="page-title">
+        <h4>Problem #{params.problem_id}</h4>
+        {
+          currentUser.role == "admin" && (
+            <button className="btn btn-primary" onClick={() => navigate(`/problems/${params.problem_id}/edit`)}>
+              Edit
+            </button>
+          )
+        }
+      </div>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           { params.contest_id ? 

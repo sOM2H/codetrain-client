@@ -25468,6 +25468,24 @@ dl li {
   padding: 0.7rem !important;
 }
 
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 20px
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 20px
+}
+
+.flex-row-buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .th-h {
   background: #2231459c;
 }

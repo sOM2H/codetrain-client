@@ -24,7 +24,7 @@ const ContestsPrivateRoute = () => {
   }, [contest_id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <></>;
   }
 
   const now = new Date();

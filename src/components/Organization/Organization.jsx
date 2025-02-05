@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
 import Spinner from '../helpers/Spinner';
 
 function Organization() {
   const { organization_id } = useParams();
+  const navigate = useNavigate();
   const [organization, setOrganization] = useState(null);
   const [teachers, setTeachers] = useState([]);
   const [contests, setContests] = useState([]);
@@ -16,7 +17,7 @@ function Organization() {
       try {
         setLoading(true);
         const orgResponse = await axiosInstance.get(`/api/v1/organizations/${organization_id}`);
-        setOrganization(orgResponse.data);
+        setOrganization(orgResponse.data.organization);
 
         const [teachersResponse, contestsResponse, studentsResponse] = await Promise.all([
           axiosInstance.get(`/api/v1/organizations/${organization_id}/teachers`),
@@ -42,7 +43,12 @@ function Organization() {
   return (
     <div className="card">
       <div className="card-body">
-        <h4 className="card-title">{organization.name}</h4>
+        <div className="card-title">
+          <h4>{organization.name}</h4>
+          <button className="btn btn-primary" onClick={() => navigate(`/organizations/${organization_id}/edit`)}>
+            Edit
+          </button>
+        </div>
                
         <h5>Contests</h5>
         <table className="table table-hover">

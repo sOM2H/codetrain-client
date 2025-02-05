@@ -12,7 +12,7 @@ const Profile = () => {
           <strong> Profile </strong>
           <p>Login: {currentUser?.login}</p>
           <p>Full Name: {currentUser?.full_name}</p>
-          <p>Roles: {currentUser?.roles[0].name}</p>
+          <p>Role: {currentUser?.role}</p>
           <p>Organization: {currentUser?.organization.name}</p>
         </div>
       </header>
