@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axiosSetup";
-import Spinner from "./helpers/Spinner";
-import Complexity from './Complexity';
-import ContestTimer from "./Contest/ContestTimer";
+import axiosInstance from "../../utils/axiosSetup";
+import Spinner from "../helpers/Spinner";
+import Complexity from "../Problems/Complexity";
+import ContestTimer from "../Contests/ContestTimer";
 
 function Contests() {
   const [contests, setContests] = useState([]);

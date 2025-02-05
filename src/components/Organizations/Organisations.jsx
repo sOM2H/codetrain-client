@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../utils/axiosSetup';
-import Spinner from './helpers/Spinner';
+import axiosInstance from '../../utils/axiosSetup';
+import Spinner from '../helpers/Spinner';
 
 function Organizations() {
   const [organizations, setOrganizations] = useState([]);

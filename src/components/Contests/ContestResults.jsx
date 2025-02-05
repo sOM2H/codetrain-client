@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useOutletContext} from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
 import Spinner from '../helpers/Spinner';
-import Score from '../Problem/Score';
+import Score from '../Problems/Score';
 import Place from './Place';
 import ProblemChar from './ProblemChar';
 

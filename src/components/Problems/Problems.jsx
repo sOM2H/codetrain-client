@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
-import Tag, { TagColors } from '../Tag';
-import Complexity from '../Complexity';
+import Tag, { TagColors } from './Tag';
+import Complexity from './Complexity';
 import Spinner from '../helpers/Spinner';
-import Score from '../Problem/Score';
+import Score from '../Problems/Score';
 
 function Problems() {
   const { currentUser } = useOutletContext();

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosSetup';
-import Tag from '../Tag';
-import TagList from '../Problem/TagList';
+import Tag from '../Problems/Tag';
+import TagList from '../Problems/TagList';
 import ProblemChar from './ProblemChar';
-import Complexity from '../Complexity';
+import Complexity from '../Problems/Complexity';
 import Spinner from '../helpers/Spinner';
-import Score from '../Problem/Score';
+import Score from '../Problems/Score';
 import ContestTimer from './ContestTimer';
 
 function Contest() {

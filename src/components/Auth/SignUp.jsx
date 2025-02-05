@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { useAuth } from "../hooks/AuthProvider";
+import { useAuth } from "../../hooks/AuthProvider";
 import { Navigate } from 'react-router-dom';
 
 const SignUp = () => {

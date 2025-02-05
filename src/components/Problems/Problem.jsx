@@ -6,7 +6,7 @@ import ProblemTests from './ProblemTests';
 import TagList from './TagList';
 import ProblemDescription from './ProblemDescription';
 import CodeEditorForm from './CodeEditorForm';
-import Complexity from '../Complexity';
+import Complexity from './Complexity';
 import Spinner from '../helpers/Spinner';
 
 const Problem = () => {
