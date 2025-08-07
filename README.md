@@ -1,70 +1,184 @@
-# Getting Started with Create React App
+# Codetrain Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React-based frontend application for the Codetrain coding platform. This client provides an intuitive interface for competitive programming, algorithm practice, and coding contests.
+
+<div align="center">
+  <img src="./demo.gif" alt="CodeTrain API Demo" width="1280"/>
+</div>
+
+## Features
+
+### 🎯 Core Functionality
+- **Problem Solving**: Browse and solve coding problems with real-time code submission
+- **Contests**: Participate in coding competitions with leaderboards and rankings
+- **Organizations**: Manage and join coding organizations
+- **User Profiles**: Personalized dashboards with progress tracking
+- **Authentication**: Secure login/signup with Google OAuth integration
+
+### 🛠 Technical Features
+- **Real-time Updates**: WebSocket integration via ActionCable
+- **Code Editor**: Syntax-highlighted code editor with multiple language support
+- **Responsive Design**: Mobile-friendly Bootstrap-based UI
+- **Rich Text Editor**: WYSIWYG editor for problem descriptions
+- **State Management**: Redux for efficient application state handling
+
+## Tech Stack
+
+- **Frontend Framework**: React 18.3.1
+- **State Management**: Redux with Redux Thunk
+- **Routing**: React Router DOM 6
+- **UI Framework**: Bootstrap 5.3.3
+- **Authentication**: Google OAuth, JWT tokens
+- **Real-time Communication**: Rails ActionCable
+- **Code Editor**: React Textarea Code Editor
+- **HTTP Client**: Axios
+- **Build Tool**: Create React App
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 22 or higher)
+- npm or yarn package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd codetrain-client
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm start
+   ```
+
+The application will open at [http://localhost:8000](http://localhost:8000).
+
+### Docker Setup
+
+For containerized development:
+
+1. **Build and run with Docker Compose**
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Access the application**
+   ```
+   http://localhost:8000
+   ```
 
 ## Available Scripts
 
-In the project directory, you can run:
+### Development
+- `npm start` - Runs the app in development mode on port 8000
+- `npm test` - Launches the test runner in interactive watch mode
+- `npm run build` - Builds the app for production
+- `npm run eject` - Ejects from Create React App (one-way operation)
 
-### `npm start`
+## Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+src/
+├── components/           # React components
+│   ├── Auth/            # Authentication components
+│   ├── Contests/        # Contest-related components
+│   ├── Problems/        # Problem-solving interface
+│   ├── Organizations/   # Organization management
+│   └── helpers/         # Utility components
+├── hooks/               # Custom React hooks
+├── utils/               # Utility functions
+├── assets/              # Static assets
+└── router.js           # Application routing configuration
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Key Routes
 
-### `npm test`
+- `/dashboard` - Main user dashboard
+- `/problems` - Browse coding problems
+- `/contests` - View and participate in contests
+- `/organizations` - Manage organizations (admin)
+- `/profile` - User profile management
+- `/login` & `/signup` - Authentication
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Environment Configuration
 
-### `npm run build`
+The application uses the following environment variables:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `PORT` - Application port (default: 8000)
+- `NODE_ENV` - Environment mode (development/production)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Features Overview
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Problem Solving
+- Browse problems by difficulty and category
+- Submit solutions with real-time feedback
+- View submission history and attempts
+- Track solving progress
 
-### `npm run eject`
+### Contests
+- Join public and private contests
+- Real-time leaderboards
+- Contest-specific problems
+- Results and rankings
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Organizations
+- Create and manage coding organizations
+- Organization-specific contests and problems
+- Member management (admin features)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### User Management
+- Google OAuth integration
+- JWT-based authentication
+- User profiles with statistics
+- Progress tracking
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Contributing
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Learn More
+## Development Guidelines
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Follow React best practices and hooks patterns
+- Use functional components with hooks
+- Maintain consistent code formatting
+- Write descriptive commit messages
+- Test components before submitting PRs
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deployment
 
-### Code Splitting
+### Production Build
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+This creates an optimized production build in the `build` folder.
 
-### Analyzing the Bundle Size
+### Docker Deployment
+```bash
+docker build -t codetrain-client .
+docker run -p 8000:8000 codetrain-client
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## License
 
-### Making a Progressive Web App
+This project is private and proprietary. All rights reserved.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Support
 
-### Advanced Configuration
+For questions and support, please contact the development team or create an issue in the repository.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Built with ❤️ using React and modern web technologies.
